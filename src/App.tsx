@@ -4,6 +4,7 @@ import { remult } from 'remult'
 import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import SignIn from './components/sign-in'
 import { Users } from './components/users'
+import EditCfp from './components/edit-cfp'
 
 function App() {
   const [_, render] = useState<{}>()
@@ -50,7 +51,7 @@ function App() {
         />
         {remult.authenticated() && <Route path="/users" element={<Users />} />}
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/" element={<div>root</div>} />
+        <Route path="/" element={<div></div>} />
       </Routes>
     </>
   )
