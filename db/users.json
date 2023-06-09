@@ -1,0 +1,23 @@
+[
+  {
+    "id": "3968c246-99c7-4e4e-ba01-310d4cb505f2",
+    "username": "Noam",
+    "password": "sha1$d2b7b5e9$1$5def83b80c3a51ed10a22dde0cd49b077a0b70dd",
+    "admin": true,
+    "createdAt": "2023-06-09T06:41:01.251Z"
+  },
+  {
+    "id": "75c503a1-aec7-4147-9e9a-1758114001e5",
+    "username": "Yael",
+    "password": "",
+    "admin": false,
+    "createdAt": "2023-06-09T12:10:28.661Z"
+  },
+  {
+    "id": "828eeaa1-b572-4fb7-94e7-9b37ed00f8c7",
+    "username": "Yoni",
+    "password": "",
+    "admin": false,
+    "createdAt": "2023-06-09T12:10:33.363Z"
+  }
+]

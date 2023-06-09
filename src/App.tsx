@@ -1,33 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { AuthController } from './shared/auth-controller'
+import { remult } from 'remult'
+import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import SignIn from './components/sign-in'
+import { Users } from './components/users'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [_, render] = useState<{}>()
+  const navigate = useNavigate()
+  useEffect(() => {
+    AuthController.currentUser().then((user) => {
+      remult.user = user
+      render({})
+    })
+  }, [])
+  async function signOut() {
+    await AuthController.signOut()
+    remult.user = undefined
+    render({})
+  }
+  if (_ === undefined) return <>loading</>
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {remult.authenticated() ? (
+        <>
+          <div>
+            Hello {remult.user?.name}
+            <button onClick={signOut}>sign out</button>
+          </div>
+          <div>
+            <Link to="/">Home</Link>
+            <Link to="/users">Users</Link>
+          </div>
+        </>
+      ) : (
+        <Link to="/signIn">Sign In</Link>
+      )}
+      <Routes>
+        <Route
+          path="/signIn"
+          element={
+            <SignIn
+              signedIn={() => {
+                render({})
+                navigate('/')
+              }}
+            />
+          }
+        />
+        {remult.authenticated() && <Route path="/users" element={<Users />} />}
+        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<div>root</div>} />
+      </Routes>
     </>
   )
 }
