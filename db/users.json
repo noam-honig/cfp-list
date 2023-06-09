@@ -19,5 +19,12 @@
     "password": "",
     "admin": false,
     "createdAt": "2023-06-09T12:10:33.363Z"
+  },
+  {
+    "id": "2880ca63-14d7-4f5b-b379-c510fd30af00",
+    "username": "Yonatan",
+    "password": "",
+    "admin": false,
+    "createdAt": "2023-06-09T12:36:57.735Z"
   }
 ]
