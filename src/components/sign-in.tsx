@@ -26,6 +26,7 @@ export default function SignIn({ signedIn }: { signedIn: VoidFunction }) {
         />
         <input
           value={password}
+          type={password}
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
         />
