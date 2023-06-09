@@ -1,5 +1,4 @@
-import * as pg from 'pg'
-import type { Pool, PoolClient, QueryResult } from 'pg'
+import { Pool, PoolClient, QueryResult } from 'pg'
 import { Remult, SqlDatabase } from 'remult'
 import {
   PostgresDataProvider,
@@ -28,7 +27,7 @@ export async function createPostgresWithSchemaDataProvider(
   schema: string,
   entities: any[]
 ) {
-  const pool = new pg.Pool({
+  const pool = new Pool({
     connectionString: process.env['DATABASE_URL'],
     ssl: process.env['DEV']
       ? false
