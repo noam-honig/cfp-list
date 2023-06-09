@@ -50,8 +50,16 @@ function App() {
           }
         />
         {remult.authenticated() && <Route path="/users" element={<Users />} />}
+        
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/" element={<div></div>} />
+        <Route
+          path="/"
+          element={
+            <div>
+              <EditCfp />
+            </div>
+          }
+        />
       </Routes>
     </>
   )

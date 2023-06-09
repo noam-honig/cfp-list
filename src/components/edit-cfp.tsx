@@ -9,12 +9,42 @@ export default function EditCfp() {
 
   return (
     <>
-      <h1>123</h1>
       <form>
-        {(['conferenceName'] as (keyof CFP)[]).map((key) => {
+        {(
+          [
+            'conferenceName',
+            'link',
+            'location',
+            'conferenceDate',
+            'cfpDate',
+            'cfpLink',
+            'coverExpanses',
+            'whoReported',
+            'notes',
+          ] as (keyof CFP)[]
+        ).map((key) => {
+          const meta = cfpRepo.fields.find(key)
+          const value = meta.toInput(cfp[key])
+          const setValue = (what: string) => {
+            setCfp({ ...cfp, [key]: meta.fromInput(what) })
+          }
+
           return (
             <div key={key}>
-              <label>{key}</label>
+              <label>{meta.caption}</label>
+              <br />
+              {meta === cfpRepo.fields.notes ? (
+                <textarea
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              ) : (
+                <input
+                  type={meta.inputType}
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              )}
             </div>
           )
         })}
