@@ -5,13 +5,13 @@ import helmet from 'helmet'
 import compression from 'compression'
 
 export const app = express()
-app.use(helmet())
-app.use(compression())
 app.use(session({ secret: process.env['SESSION_SECRET'] }))
 
 app.use(api)
 
 if (!process.env['VITE']) {
+  app.use(helmet())
+  app.use(compression())
   const frontendFiles = process.cwd() + '/dist'
   app.use(express.static(frontendFiles))
   app.get('/*', (_, res) => {
