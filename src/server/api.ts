@@ -4,9 +4,10 @@ import { AuthController } from '../shared/auth-controller'
 import { config } from 'dotenv'
 import { initRequest } from './server-session'
 import { createPostgresWithSchemaDataProvider } from './postgres-with-schema'
+import { CFP } from '../shared/cfp'
 config()
 
-const entities = [User]
+const entities = [User, CFP]
 
 export const api = remultExpress({
   initRequest,
