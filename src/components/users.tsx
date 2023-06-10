@@ -1,6 +1,7 @@
 import { remult } from 'remult'
 import { User } from '../shared/user'
 import { useEffect, useState } from 'react'
+import { AuthController } from '../shared/auth-controller'
 
 const userRepo = remult.repo(User)
 
@@ -24,7 +25,23 @@ export function Users() {
     <>
       <ul>
         {users.map((user) => {
-          return <li key={user.id}>{user.username}</li>
+          async function resetPassword() {
+            try {
+              if (
+                confirm(`Are you sure you want to reset the password for ${user}?
+If you do, next time they'll sign in, any password they'll set will be their password.`)
+              )
+                alert(await AuthController.resetPassword(user.id))
+            } catch (error: any) {
+              alert(error.message)
+            }
+          }
+          return (
+            <li key={user.id}>
+              {user.username}{' '}
+              <button onClick={resetPassword}>Reset Password</button>
+            </li>
+          )
         })}
       </ul>
       <button onClick={() => addUser()}>Add user</button>

@@ -1,4 +1,4 @@
-import { Allow, Entity, FieldRef, Fields, Validators } from 'remult'
+import { Allow, Entity, FieldRef, Fields, Validators, remult } from 'remult'
 
 @Entity<CFP>('cfps', {
   allowApiCrud: Allow.authenticated,
@@ -36,6 +36,11 @@ export class CFP {
   notes = ''
   @Fields.createdAt()
   createdAt = new Date()
+
+  @Fields.string({
+    serverExpression: () => JSON.stringify(remult.user),
+  })
+  test = ''
 }
 
 export function validateDate(_: any, fieldRef: FieldRef<any, Date>) {

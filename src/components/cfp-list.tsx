@@ -88,9 +88,13 @@ export function CFPList() {
             return (
               <tr key={cfp.id}>
                 <td>
-                  <a href={cfp.link} target="_blank">
-                    {cfp.conferenceName}
-                  </a>
+                  {cfp.link ? (
+                    <a href={cfp.link} target="_blank">
+                      {cfp.conferenceName}
+                    </a>
+                  ) : (
+                    cfp.conferenceName
+                  )}
                 </td>
                 <td>{cfp.location}</td>
                 <td>{cfp.conferenceDate.toLocaleDateString('he-il')}</td>

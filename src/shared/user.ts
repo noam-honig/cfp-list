@@ -4,7 +4,7 @@ import { Allow, Entity, Fields, Validators } from 'remult'
   allowApiCrud: Allow.authenticated,
 })
 export class User {
-  @Fields.uuid()
+  @Fields.cuid()
   id = ''
 
   @Fields.string({

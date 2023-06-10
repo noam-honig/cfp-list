@@ -4,6 +4,15 @@ import { generate, verify } from 'password-hash'
 import { setSessionUser } from '../server/server-session'
 
 export class AuthController {
+  @BackendMethod({ allowed: Allow.authenticated })
+  static async resetPassword(id: string) {
+    const userRepo = remult.repo(User)
+    const user = await userRepo.findId(id)
+    if (!user) throw new Error('Invalid User')
+    user.password='';
+    await userRepo.save(user)
+    return 'Done'
+  }
   @BackendMethod({ allowed: true })
   /**
    * This sign mechanism represents a simplistic sign in management utility with the following behaviors
