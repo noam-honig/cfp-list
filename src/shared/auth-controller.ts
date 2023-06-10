@@ -9,7 +9,7 @@ export class AuthController {
     const userRepo = remult.repo(User)
     const user = await userRepo.findId(id)
     if (!user) throw new Error('Invalid User')
-    user.password='';
+    user.password = ''
     await userRepo.save(user)
     return 'Done'
   }
@@ -60,5 +60,5 @@ export class AuthController {
     return setSessionUser(undefined!)
   }
 }
-
-//[ ] - reset password functionality
+//[ ] - write readme for contributing
+//[ ] - deploy to heroku and load data from test environment
