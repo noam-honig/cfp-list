@@ -55,7 +55,7 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
             <div key={key}>
               <label>{meta.caption}</label>
               <div>
-                {meta === cfpRepo.fields.notes ? (
+                {key == 'notes' ? (
                   <textarea
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
