@@ -61,4 +61,4 @@ export class AuthController {
   }
 }
 //[ ] - write readme for contributing
-//[ ] - deploy to heroku and load data from test environment
+//[x] - deploy to heroku and load data from test environment
