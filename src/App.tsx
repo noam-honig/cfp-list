@@ -36,8 +36,11 @@ function App() {
           </div>
         </>
       ) : (
-        <Link to="/signIn">Sign In</Link>
+        <>
+          <Link to="/signIn">Sign In</Link>
+        </>
       )}
+
       <Routes>
         <Route
           path="/signIn"
@@ -61,6 +64,10 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/" element={<CFPList />} />
       </Routes>
+      <br />
+      <a href="https://github.com/noam-honig/cfp-list">
+        improve this site on github
+      </a>
     </>
   )
 }
