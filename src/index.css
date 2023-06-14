@@ -1,3 +1,8 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+vwc-header>div {
+  display: flex;
+  justify-content: space-between;
+}
