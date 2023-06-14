@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vonage/vivid": "^3.17.0",
     "compression": "^1.7.4",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.1.4",
