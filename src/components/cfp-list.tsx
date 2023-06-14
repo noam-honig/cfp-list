@@ -1,7 +1,10 @@
+// @ts-nocheck
 import { remult, EntityOrderBy } from 'remult'
 import { CFP } from '../shared/cfp'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import '@vonage/vivid/data-grid';
+import '@vonage/vivid/checkbox';
 
 const cfpRepo = remult.repo(CFP)
 
@@ -29,19 +32,17 @@ export function CFPList() {
   return (
     <>
       <div>
-        <label>
-          <input
+          <vwc-checkbox
+            label="Show overdue CFPs"
             name="showOverdueCfps"
             type="checkbox"
             checked={showOverdueCfps}
             onChange={(e) => setShowOverdueCfps(e.target.checked)}
-          ></input>
-          Show overdue CFPs
-        </label>
+          ></vwc-checkbox>
       </div>
-      <table>
-        <thead>
-          <tr>
+      <vwc-data-grid>
+          <vwc-data-grid-row role="row" class="header" row-type="header">
+
             {(
               [
                 'conferenceName',
@@ -61,16 +62,22 @@ export function CFPList() {
                 })
               }
               return (
-                <th key={key} onClick={sortByMe}>
+                <vwc-data-grid-cell cell-type="columnheader" 
+                                    role="columnheader" 
+                                    key={key} 
+                                    onClick={sortByMe}>
                   {meta.caption}{' '}
                   {sort == 'asc' ? '\\/' : sort == 'desc' ? '/\\' : ''}
-                </th>
+                </vwc-data-grid-cell>
               )
             })}
-            {remult.authenticated() && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
+            {remult.authenticated() && (
+                  <vwc-data-grid-cell>
+                    Admin Tools
+                  </vwc-data-grid-cell>
+                )}
+          </vwc-data-grid-row>
+
           {cfps.map((cfp) => {
             async function deleteCfp() {
               try {
@@ -86,8 +93,8 @@ export function CFPList() {
               }
             }
             return (
-              <tr key={cfp.id}>
-                <td>
+              <vwc-data-grid-row key={cfp.id}>
+                <vwc-data-grid-cell>
                   {cfp.link ? (
                     <a href={cfp.link} target="_blank">
                       {cfp.conferenceName}
@@ -95,35 +102,34 @@ export function CFPList() {
                   ) : (
                     cfp.conferenceName
                   )}
-                </td>
-                <td>{cfp.location}</td>
-                <td>{cfp.conferenceDate.toLocaleDateString('he-il')}</td>
-                <td>
+                </vwc-data-grid-cell>
+                <vwc-data-grid-cell>{cfp.location}</vwc-data-grid-cell>
+                <vwc-data-grid-cell>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
+                <vwc-data-grid-cell>
                   <a href={cfp.cfpLink} target="_blank">
                     {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                   </a>
-                </td>
-                <td>{cfp.coverExpanses}</td>
-                <td>{cfp.notes}</td>
+                </vwc-data-grid-cell>
+                <vwc-data-grid-cell>{cfp.coverExpanses}</vwc-data-grid-cell>
+                <vwc-data-grid-cell>{cfp.notes}</vwc-data-grid-cell>
                 {remult.authenticated() && (
-                  <td>
-                    <Link to={'/cfps/' + cfp.id}>Edit</Link>
-                    <a
-                      href=""
-                      onClick={(e) => {
-                        e.preventDefault()
-                        deleteCfp()
-                      }}
-                    >
-                      Delete{' '}
-                    </a>
-                  </td>
+                  <vwc-data-grid-cell>
+                      <Link to={'/cfps/' + cfp.id}>Edit</Link>
+                      <a
+                        href=""
+                        onClick={(e) => {
+                          e.preventDefault()
+                          deleteCfp()
+                        }}
+                      >
+                        Delete{' '}
+                      </a>
+                  </vwc-data-grid-cell>
                 )}
-              </tr>
+              </vwc-data-grid-row>
             )
           })}
-        </tbody>
-      </table>
+      </vwc-data-grid>
       {remult.authenticated() && <Link to="/cfps/new">Add Cfp</Link>}
     </>
   )
