@@ -36,7 +36,8 @@ export class AuthController {
     if (user) {
       if (!user.password) {
         // if the user has no password defined, the first password they use is their password
-        await userRepo.save({ ...user, password: generate(password) })
+        user.password = generate(password)
+        await userRepo.save(user)
       }
 
       if (verify(password, user.password)) {
@@ -60,5 +61,3 @@ export class AuthController {
     return setSessionUser(undefined!)
   }
 }
-//[ ] - write readme for contributing
-//[x] - deploy to heroku and load data from test environment

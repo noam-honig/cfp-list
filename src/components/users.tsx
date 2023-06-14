@@ -28,7 +28,7 @@ export function Users() {
           async function resetPassword() {
             try {
               if (
-                confirm(`Are you sure you want to reset the password for ${user}?
+                confirm(`Are you sure you want to reset the password for ${user.username}?
 If you do, next time they'll sign in, any password they'll set will be their password.`)
               )
                 alert(await AuthController.resetPassword(user.id))
