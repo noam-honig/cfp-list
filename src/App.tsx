@@ -7,17 +7,19 @@ import SignIn from './components/sign-in'
 import { Users } from './components/users'
 import EditCfp from './components/edit-cfp'
 import { CFPList } from './components/cfp-list'
-import '@vonage/vivid/header';
-import '@vonage/vivid/button';
+import '@vonage/vivid/header'
+import '@vonage/vivid/button'
 
 function App() {
   const [_, render] = useState<{}>()
   const navigate = useNavigate()
   useEffect(() => {
-    AuthController.currentUser().then((user) => {
-      remult.user = user
-      render({})
-    })
+    AuthController.currentUser()
+      .then((user) => {
+        remult.user = user
+        render({})
+      })
+      .catch((err) => alert(err.message))
   }, [])
   async function signOut() {
     await AuthController.signOut()
@@ -29,36 +31,39 @@ function App() {
     <>
       {remult.authenticated() ? (
         <>
-        <vwc-header alternate>
-          <div class="info" slot="action-items">
-            Hello {remult.user?.name}
-        
-          <vwc-button onClick={signOut} 
-                      label="Sign Out" 
-                      connotation="alert" 
-                      appearance="filled"
-                      size="super-condensed"></vwc-button>
-          </div>
-          <div class="menu">
-            <Link to="/">
-              <vwc-button size="condensed"
-                          label="Home"  
-                          appearance="filled"></vwc-button>
-            </Link>
-            <Link to="/users">
-              <vwc-button size="condensed"
-                          label="Users"  
-                          appearance="filled"></vwc-button>
-            </Link>    
-          </div>
-        </vwc-header>
+          <vwc-header alternate>
+            <div class="info" slot="action-items">
+              Hello {remult.user?.name}
+              <vwc-button
+                onClick={signOut}
+                label="Sign Out"
+                connotation="alert"
+                appearance="filled"
+                size="super-condensed"
+              ></vwc-button>
+            </div>
+            <div class="menu">
+              <Link to="/">
+                <vwc-button
+                  size="condensed"
+                  label="Home"
+                  appearance="filled"
+                ></vwc-button>
+              </Link>
+              <Link to="/users">
+                <vwc-button
+                  size="condensed"
+                  label="Users"
+                  appearance="filled"
+                ></vwc-button>
+              </Link>
+            </div>
+          </vwc-header>
         </>
       ) : (
         <>
           <Link to="/signIn">
-              <vwc-button
-                      label="Sign In"  
-                      appearance="filled"></vwc-button>
+            <vwc-button label="Sign In" appearance="filled"></vwc-button>
           </Link>
         </>
       )}
@@ -89,7 +94,11 @@ function App() {
       <br />
       <br />
       <a href="https://github.com/noam-honig/cfp-list">
-        <vwc-button label="improve this site on github" appearance="filled" icon="github-mono"></vwc-button>
+        <vwc-button
+          label="improve this site on github"
+          appearance="filled"
+          icon="github-mono"
+        ></vwc-button>
       </a>
     </>
   )
