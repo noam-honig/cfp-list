@@ -37,7 +37,7 @@ export function CFPList() {
             name="showOverdueCfps"
             type="checkbox"
             checked={showOverdueCfps}
-            onChange={(e) => setShowOverdueCfps(e.target.checked)}
+            onClick={(e) => setShowOverdueCfps(e.target.checked)}
           ></vwc-checkbox>
       </div>
       <vwc-data-grid>
