@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useState } from 'react'
 import { AuthController } from './shared/auth-controller'
 import { remult } from 'remult'
@@ -6,6 +7,8 @@ import SignIn from './components/sign-in'
 import { Users } from './components/users'
 import EditCfp from './components/edit-cfp'
 import { CFPList } from './components/cfp-list'
+import '@vonage/vivid/header';
+import '@vonage/vivid/button';
 
 function App() {
   const [_, render] = useState<{}>()
@@ -26,18 +29,37 @@ function App() {
     <>
       {remult.authenticated() ? (
         <>
-          <div>
+        <vwc-header alternate>
+          <div class="info" slot="action-items">
             Hello {remult.user?.name}
-            <button onClick={signOut}>sign out</button>
+        
+          <vwc-button onClick={signOut} 
+                      label="Sign Out" 
+                      connotation="alert" 
+                      appearance="filled"
+                      size="super-condensed"></vwc-button>
           </div>
-          <div>
-            <Link to="/">Home</Link>
-            <Link to="/users">Users</Link>
+          <div class="menu">
+            <Link to="/">
+              <vwc-button size="condensed"
+                          label="Home"  
+                          appearance="filled"></vwc-button>
+            </Link>
+            <Link to="/users">
+              <vwc-button size="condensed"
+                          label="Users"  
+                          appearance="filled"></vwc-button>
+            </Link>    
           </div>
+        </vwc-header>
         </>
       ) : (
         <>
-          <Link to="/signIn">Sign In</Link>
+          <Link to="/signIn">
+              <vwc-button
+                      label="Sign In"  
+                      appearance="filled"></vwc-button>
+          </Link>
         </>
       )}
 
