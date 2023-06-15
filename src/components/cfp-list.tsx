@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '@vonage/vivid/data-grid';
 import '@vonage/vivid/checkbox';
+import '@vonage/vivid/button';
 
 const cfpRepo = remult.repo(CFP)
 
@@ -130,7 +131,10 @@ export function CFPList() {
             )
           })}
       </vwc-data-grid>
-      {remult.authenticated() && <Link to="/cfps/new">Add Cfp</Link>}
+      {remult.authenticated() && 
+        <Link to="/cfps/new">
+          <vwc-button connotation="cta" appearance="filled" label="Add Cfp"></vwc-button>
+        </Link>}
     </>
   )
 }
