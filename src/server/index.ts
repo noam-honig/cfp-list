@@ -1,7 +1,7 @@
 import express from 'express'
 import session from 'cookie-session'
 import { api } from './api'
-import helmet from 'helmet'
+//import helmet from 'helmet'
 import compression from 'compression'
 
 export const app = express()
