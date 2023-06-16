@@ -115,7 +115,9 @@ export function CFPList() {
                 <vwc-data-grid-cell>{cfp.notes}</vwc-data-grid-cell>
                 {remult.authenticated() && (
                   <vwc-data-grid-cell>
-                      <Link to={'/cfps/' + cfp.id}>Edit</Link>
+                      <Link to={'/cfps/' + cfp.id}>
+                        <vwc-button size="super-condensed" connotation="cta" appearance="filled" label="Edit"></vwc-button>
+                      </Link>
                       <a
                         href=""
                         onClick={(e) => {
@@ -123,7 +125,8 @@ export function CFPList() {
                           deleteCfp()
                         }}
                       >
-                        Delete{' '}
+                        <vwc-button size="super-condensed" connotation="alert" appearance="filled" label="Delete">
+                        </vwc-button>
                       </a>
                   </vwc-data-grid-cell>
                 )}
