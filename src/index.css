@@ -14,3 +14,12 @@ vwc-data-grid-cell {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.edit-cfp {
+  width: 100%;
+  text-align: center;
+}
+
+.edit-cfp vwc-text-field {
+  text-align: left;
+}
