@@ -10,7 +10,7 @@ app.use(session({ secret: process.env['SESSION_SECRET'] || 'dev secret' }))
 app.use(api)
 
 if (!process.env['VITE']) {
-  app.use(helmet())
+  //app.use(helmet())
   app.use(compression())
   const frontendFiles = process.cwd() + '/dist'
   app.use(express.static(frontendFiles))
