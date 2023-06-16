@@ -1,4 +1,4 @@
-// ts-nocheck
+// @ts-nocheck
 import { FormEvent, useEffect, useState } from 'react'
 import { CFP } from '../shared/cfp'
 import { ErrorInfo, remult } from 'remult'
