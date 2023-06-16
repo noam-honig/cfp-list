@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { remult } from 'remult'
 import { User } from '../shared/user'
 import { useEffect, useState } from 'react'
