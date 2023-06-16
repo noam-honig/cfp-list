@@ -65,20 +65,20 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
                     <vwc-text-area
                       label="Notes"
                       value={value}
-                      onChange={(e) => setValue(e.target.value)}
+                      onBlur={(e) => setValue(e.target.value)}
                     ></vwc-text-area>
                   ) : (
                     <>
                     {meta.inputType === 'number' ? (
                       <vwc-number-field label={meta.caption} 
                                         value={value} 
-                                        onChange={(e: Event) => setValue(e.target?.value)}>
+                                        onBlur={(e) => setValue(e.target.value)}>
                       </vwc-number-field>
                     ) : (
                       <vwc-text-field type={meta.inputType}
                                       label={meta.caption} 
                                       value={value} 
-                                      onChange={(e: Event) => setValue(e.target?.value)}>
+                                      onBlur={(e) => setValue(e.target.value)}>
                       </vwc-text-field>
                     )}
                     </>
@@ -88,7 +88,10 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
             )
           })}
           </vwc-layout>
-          <vwc-button label="Save" type="submit" appearance="filled" connotation="success"></vwc-button>
+          <vwc-button label="Save" 
+                      type="submit" 
+                      appearance="filled" 
+                      connotation="success"></vwc-button>
         </form>
 
     </vwc-card>
