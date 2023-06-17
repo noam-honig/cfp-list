@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { remult, EntityOrderBy } from 'remult'
 import { CFP } from '../shared/cfp'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import '@vonage/vivid/data-grid';
 import '@vonage/vivid/checkbox';
@@ -9,31 +8,45 @@ import '@vonage/vivid/button';
 import '@vonage/vivid/action-group';
 import '@vonage/vivid/layout';
 import '@vonage/vivid/card';
+import '@vonage/vivid/dialog';
+import type { Dialog } from '@vonage/vivid/lib/dialog/dialog';
+import type { Button } from '@vonage/vivid/lib/button/button';
 
 const cfpRepo = remult.repo(CFP)
 
 async function deleteCfp(cfp: CFP) {
-  try {
-    if (
-      confirm(
-        'Are you sure you want to delete ' + cfp.conferenceName
-      )
-    ) {
-      await cfpRepo.delete(cfp)
-    }
-  } catch (error: any) {
-    alert(error.message)
-  }
+  const dialog = document.getElementById('confirm') as Dialog;
+  dialog.headline = 'Delete CFP';
+  dialog.subtitle = `Are you sure you want to delete ${cfp.conferenceName}?`;
+  dialog.showModal();
+  return new Promise((resolve, reject) => {
+    dialog.addEventListener('close', async _ => {
+      if (dialog.returnValue === 'Yes') {
+        try {
+          resolve(await cfpRepo.delete(cfp));
+        } catch (error: any) {
+          reject(error.message);
+        }
+      }
+    });
+  });
 }
 
 export function CFPList() {
   const [cfps, setCfps] = useState<CFP[]>([])
   const [showOverdueCfps, setShowOverdueCfps] = useState(false)
   const [viewModeState, setViewModeState] = useState('table');
+  const confirmRef = useRef<Dialog>(null);
   const [orderBy, setOrderBy] = useState<EntityOrderBy<CFP>>({
     cfpDate: 'asc',
     conferenceDate: 'asc',
-  })
+  });
+  const confirmButtonClick = ({target}: {target: Button}) => {
+    if (confirmRef && confirmRef.current) {
+      confirmRef.current.returnValue = target.label as string; 
+      confirmRef?.current?.close();    
+    }
+  };
   useEffect(() => {
     return cfpRepo
       .liveQuery({
@@ -50,6 +63,16 @@ export function CFPList() {
   }, [orderBy, showOverdueCfps])
   return (
     <>
+      <vwc-dialog id="confirm" ref={confirmRef}>
+      <div slot="footer" class="demo-footer">
+        <vwc-button appearance="outlined" 
+                    label="Cancel"
+                    onClick={e => confirmButtonClick(e)}></vwc-button>
+        <vwc-button appearance="filled" 
+                    label="Yes"
+                    onClick={e => confirmButtonClick(e)}></vwc-button>
+      </div>
+      </vwc-dialog>
       <div>
           <vwc-checkbox
             label="Show overdue CFPs"
