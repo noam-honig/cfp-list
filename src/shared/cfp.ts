@@ -15,6 +15,8 @@ export class CFP {
   })
   conferenceName = ''
   @Fields.string()
+  image = ''
+  @Fields.string()
   link = ''
   @Fields.string()
   location = ''

@@ -194,7 +194,7 @@ export function CFPList() {
                         headline={cfp.conferenceName} 
                         text={cfp.notes}>
                 <img slot="media" 
-                    src="https://picsum.photos/id/1015/300/200" 
+                    src={cfp.image ? cfp.image: "https://picsum.photos/id/1015/300/200"}
                     alt="landscape"/>
                 <vwc-data-grid-row slot="footer">
                   <vwc-data-grid-cell>

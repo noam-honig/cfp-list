@@ -49,6 +49,7 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
               'cfpDate',
               'coverExpanses',
               'whoReported',
+              'image',
               'notes',
             ] as (keyof CFP)[]
           ).map((key) => {
