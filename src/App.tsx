@@ -32,7 +32,7 @@ function App() {
       {remult.authenticated() ? (
         <>
           <vwc-header alternate>
-            <div class="info" slot="action-items">
+            <div className="info" slot="action-items">
               Hello {remult.user?.name}
               <vwc-button
                 onClick={signOut}
@@ -42,7 +42,7 @@ function App() {
                 size="super-condensed"
               ></vwc-button>
             </div>
-            <div class="menu">
+            <div className="menu">
               <Link to="/">
                 <vwc-button
                   size="condensed"

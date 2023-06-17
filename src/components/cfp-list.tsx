@@ -64,14 +64,14 @@ export function CFPList() {
   return (
     <>
       <vwc-dialog id="confirm" ref={confirmRef}>
-      <div slot="footer" class="demo-footer">
-        <vwc-button appearance="outlined" 
-                    label="Cancel"
-                    onClick={e => confirmButtonClick(e)}></vwc-button>
-        <vwc-button appearance="filled" 
-                    label="Yes"
-                    onClick={e => confirmButtonClick(e)}></vwc-button>
-      </div>
+        <div slot="footer">
+          <vwc-button appearance="outlined" 
+                      label="Cancel"
+                      onClick={e => confirmButtonClick(e)}></vwc-button>
+          <vwc-button appearance="filled" 
+                      label="Yes"
+                      onClick={e => confirmButtonClick(e)}></vwc-button>
+        </div>
       </vwc-dialog>
       <div>
           <vwc-checkbox
@@ -94,9 +94,10 @@ export function CFPList() {
                 icon: 'apps-line',
                 label: 'Cards View',
               },
-            ]).map((viewMode, index, arr) => {
+            ]).map((viewMode) => {
               return (
-                <vwc-button type="button"
+                <vwc-button key={viewMode.name}
+                            type="button"
                             role="radio"
                             icon={viewMode.icon}
                             aria-checked={viewMode.name === viewModeState}
@@ -199,7 +200,6 @@ export function CFPList() {
         <vwc-layout>
           {cfps.map((cfp) => {
             return (
-              <>
               <vwc-card key={cfp.id}
                         class="cfp-card" 
                         headline={cfp.conferenceName} 
@@ -209,7 +209,7 @@ export function CFPList() {
                     alt="landscape"/>
                 <vwc-data-grid-row slot="footer">
                   <vwc-data-grid-cell>
-                    <span class="cfp-property">Name: </span>
+                    <span className="cfp-property">Name: </span>
                     {cfp.link ? (
                       <a href={cfp.link} target="_blank">
                         {cfp.conferenceName}
@@ -218,14 +218,14 @@ export function CFPList() {
                       cfp.conferenceName
                     )}
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Location: </span>{cfp.location}</vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Date: </span>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Location: </span>{cfp.location}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Date: </span>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
                   <vwc-data-grid-cell>
-                  <span class="cfp-property">CFP Deadline: </span><a href={cfp.cfpLink} target="_blank">
+                  <span className="cfp-property">CFP Deadline: </span><a href={cfp.cfpLink} target="_blank">
                       {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                     </a>
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Cover Expanses: </span>{cfp.coverExpanses}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Cover Expanses: </span>{cfp.coverExpanses}</vwc-data-grid-cell>
                   {remult.authenticated() && (
                     <vwc-data-grid-cell>
                         <Link to={'/cfps/' + cfp.id}>
@@ -245,8 +245,6 @@ export function CFPList() {
                   )}
                 </vwc-data-grid-row>
               </vwc-card>
-
-              </>
             )
           })}
         </vwc-layout>
