@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom'
 import '@vonage/vivid/data-grid';
 import '@vonage/vivid/checkbox';
 import '@vonage/vivid/button';
+import '@vonage/vivid/action-group';
 
 const cfpRepo = remult.repo(CFP)
 
 export function CFPList() {
   const [cfps, setCfps] = useState<CFP[]>([])
   const [showOverdueCfps, setShowOverdueCfps] = useState(false)
+  const [viewModeState, setViewModeState] = useState('table');
   const [orderBy, setOrderBy] = useState<EntityOrderBy<CFP>>({
     cfpDate: 'asc',
     conferenceDate: 'asc',
@@ -40,6 +42,36 @@ export function CFPList() {
             checked={showOverdueCfps}
             onClick={(e) => setShowOverdueCfps(e.target.checked)}
           ></vwc-checkbox>
+
+          <vwc-action-group role="radiogroup" aria-label="List Display Type">
+            {([
+              {
+                name: 'table',
+                icon: 'table-line',
+                label: 'Table View',
+              },
+              {
+                name: 'cards',
+                icon: 'apps-line',
+                label: 'Cards View',
+              },
+            ]).map((viewMode, index, arr) => {
+              return (
+                <vwc-button type="button"
+                            role="radio"
+                            icon={viewMode.icon}
+                            aria-checked={viewMode.name === viewModeState}
+                            tabindex="0"
+                            aria-label={viewMode.label}
+                            appearance={(viewMode.name === viewModeState) ? 'filled' : 'outline'}                            
+                            onClick={() => {
+                              setViewModeState(viewMode.name)
+                            }}
+                            ></vwc-button>
+              )
+              })
+            }
+          </vwc-action-group>
       </div>
       <vwc-data-grid>
           <vwc-data-grid-row role="row" class="header" row-type="header">
