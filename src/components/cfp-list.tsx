@@ -198,6 +198,7 @@ export function CFPList() {
                     alt="landscape"/>
                 <vwc-data-grid-row slot="footer">
                   <vwc-data-grid-cell>
+                    <span class="cfp-property">Name: </span>
                     {cfp.link ? (
                       <a href={cfp.link} target="_blank">
                         {cfp.conferenceName}
@@ -206,15 +207,14 @@ export function CFPList() {
                       cfp.conferenceName
                     )}
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell>{cfp.location}</vwc-data-grid-cell>
-                  <vwc-data-grid-cell>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span class="cfp-property">Location: </span>{cfp.location}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span class="cfp-property">Date: </span>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
                   <vwc-data-grid-cell>
-                    <a href={cfp.cfpLink} target="_blank">
+                  <span class="cfp-property">CFP Deadline: </span><a href={cfp.cfpLink} target="_blank">
                       {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                     </a>
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell>{cfp.coverExpanses}</vwc-data-grid-cell>
-                  <vwc-data-grid-cell>{cfp.notes}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span class="cfp-property">Cover Expanses: </span>{cfp.coverExpanses}</vwc-data-grid-cell>
                   {remult.authenticated() && (
                     <vwc-data-grid-cell>
                         <Link to={'/cfps/' + cfp.id}>
