@@ -5,4 +5,9 @@ import express from 'vite3-plugin-express'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), express('src/server')],
+  build: {
+    rollupOptions: {
+      external: ["node-fetch"],
+    },
+  },
 })

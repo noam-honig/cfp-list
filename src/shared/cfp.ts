@@ -1,7 +1,8 @@
 import { Allow, Entity, FieldRef, Fields, Validators, remult } from 'remult'
+import { Roles } from './roles'
 
 @Entity<CFP>('cfps', {
-  allowApiCrud: Allow.authenticated,
+  allowApiCrud: Roles.admin,
   allowApiRead: Allow.everyone,
   defaultOrderBy: {
     cfpDate: 'asc',
