@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { remult, EntityOrderBy } from 'remult'
 import { CFP } from '../shared/cfp'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import '@vonage/vivid/data-grid';
@@ -10,20 +9,48 @@ import '@vonage/vivid/button';
 import '@vonage/vivid/action-group';
 import '@vonage/vivid/layout';
 import '@vonage/vivid/card';
+import '@vonage/vivid/dialog';
+import type { Dialog } from '@vonage/vivid/lib/dialog/dialog';
+import type { Button } from '@vonage/vivid/lib/button/button';
 
 import { Roles } from '../shared/roles'
 
 
 const cfpRepo = remult.repo(CFP)
 
+async function deleteCfp(cfp: CFP) {
+  const dialog = document.getElementById('confirm') as Dialog;
+  dialog.headline = 'Delete CFP';
+  dialog.subtitle = `Are you sure you want to delete ${cfp.conferenceName}?`;
+  dialog.showModal();
+  return new Promise((resolve, reject) => {
+    dialog.addEventListener('close', async _ => {
+      if (dialog.returnValue === 'Yes') {
+        try {
+          resolve(await cfpRepo.delete(cfp));
+        } catch (error: any) {
+          reject(error.message);
+        }
+      }
+    });
+  });
+}
+
 export function CFPList() {
   const [cfps, setCfps] = useState<CFP[]>([])
   const [showOverdueCfps, setShowOverdueCfps] = useState(false)
   const [viewModeState, setViewModeState] = useState('table');
+  const confirmRef = useRef<Dialog>(null);
   const [orderBy, setOrderBy] = useState<EntityOrderBy<CFP>>({
     cfpDate: 'asc',
     conferenceDate: 'asc',
-  })
+  });
+  const confirmButtonClick = ({target}: {target: Button}) => {
+    if (confirmRef && confirmRef.current) {
+      confirmRef.current.returnValue = target.label as string; 
+      confirmRef?.current?.close();    
+    }
+  };
   useEffect(() => {
     return cfpRepo
       .liveQuery({
@@ -40,6 +67,16 @@ export function CFPList() {
   }, [orderBy, showOverdueCfps])
   return (
     <>
+      <vwc-dialog id="confirm" ref={confirmRef}>
+        <div slot="footer">
+          <vwc-button appearance="outlined" 
+                      label="Cancel"
+                      onClick={e => confirmButtonClick(e)}></vwc-button>
+          <vwc-button appearance="filled" 
+                      label="Yes"
+                      onClick={e => confirmButtonClick(e)}></vwc-button>
+        </div>
+      </vwc-dialog>
       <div>
 
           <vwc-checkbox
@@ -62,9 +99,10 @@ export function CFPList() {
                 icon: 'apps-line',
                 label: 'Cards View',
               },
-            ]).map((viewMode, index, arr) => {
+            ]).map((viewMode) => {
               return (
-                <vwc-button type="button"
+                <vwc-button key={viewMode.name}
+                            type="button"
                             role="radio"
                             icon={viewMode.icon}
                             aria-checked={viewMode.name === viewModeState}
@@ -119,6 +157,7 @@ export function CFPList() {
             <vwc-data-grid-cell>Admin Tools</vwc-data-grid-cell>
           )}
         </vwc-data-grid-row>
+
 
         {cfps.map((cfp) => {
           async function deleteCfp() {
@@ -179,29 +218,17 @@ export function CFPList() {
                     ></vwc-button>
                   </a>
                 </vwc-data-grid-cell>
+
               )}
             </vwc-data-grid-row>
           )
         })}
+
       </vwc-data-grid>
       ) : (
         <vwc-layout>
           {cfps.map((cfp) => {
-            async function deleteCfp() {
-              try {
-                if (
-                  confirm(
-                    'Are you sure you want to delete ' + cfp.conferenceName
-                  )
-                ) {
-                  await cfpRepo.delete(cfp)
-                }
-              } catch (error: any) {
-                alert(error.message)
-              }
-            }
             return (
-              <>
               <vwc-card key={cfp.id}
                         class="cfp-card" 
                         headline={cfp.conferenceName} 
@@ -211,7 +238,7 @@ export function CFPList() {
                     alt="landscape"/>
                 <vwc-data-grid-row slot="footer">
                   <vwc-data-grid-cell>
-                    <span class="cfp-property">Name: </span>
+                    <span className="cfp-property">Name: </span>
                     {cfp.link ? (
                       <a href={cfp.link} target="_blank">
                         {cfp.conferenceName}
@@ -220,14 +247,14 @@ export function CFPList() {
                       cfp.conferenceName
                     )}
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Location: </span>{cfp.location}</vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Date: </span>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Location: </span>{cfp.location}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Date: </span>{cfp.conferenceDate.toLocaleDateString('he-il')}</vwc-data-grid-cell>
                   <vwc-data-grid-cell>
-                  <span class="cfp-property">CFP Deadline: </span><a href={cfp.cfpLink} target="_blank">
+                  <span className="cfp-property">CFP Deadline: </span><a href={cfp.cfpLink} target="_blank">
                       {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                     </a>
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell><span class="cfp-property">Cover Expanses: </span>{cfp.coverExpanses}</vwc-data-grid-cell>
+                  <vwc-data-grid-cell><span className="cfp-property">Cover Expanses: </span>{cfp.coverExpanses}</vwc-data-grid-cell>
                   {remult.authenticated() && (
                     <vwc-data-grid-cell>
                         <Link to={'/cfps/' + cfp.id}>
@@ -237,7 +264,7 @@ export function CFPList() {
                           href=""
                           onClick={(e) => {
                             e.preventDefault()
-                            deleteCfp()
+                            deleteCfp(cfp)
                           }}
                         >
                           <vwc-button size="super-condensed" connotation="alert" appearance="filled" label="Delete">
@@ -247,8 +274,6 @@ export function CFPList() {
                   )}
                 </vwc-data-grid-row>
               </vwc-card>
-
-              </>
             )
           })}
         </vwc-layout>
