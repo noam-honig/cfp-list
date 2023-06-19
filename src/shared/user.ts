@@ -1,19 +1,18 @@
-import { Allow, Entity, Fields, Validators } from 'remult'
+import { Entity, Fields } from 'remult'
+import { Roles } from './roles'
 
 @Entity('users', {
-  allowApiCrud: Allow.authenticated,
+  allowApiCrud: Roles.admin,
 })
 export class User {
   @Fields.cuid()
   id = ''
-
-  @Fields.string({
-    validate: [Validators.required, Validators.uniqueOnBackend],
-  })
-  username = ''
-
-  @Fields.string({ includeInApi: false })
-  password = ''
+  @Fields.string()
+  name = ''
+  @Fields.string()
+  email = ''
+  @Fields.string()
+  githubUrl = ''
 
   @Fields.boolean()
   admin = false

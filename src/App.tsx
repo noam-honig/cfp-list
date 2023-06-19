@@ -1,14 +1,16 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AuthController } from './shared/auth-controller'
 import { remult } from 'remult'
 import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import SignIn from './components/sign-in'
+
 import { Users } from './components/users'
 import EditCfp from './components/edit-cfp'
 import { CFPList } from './components/cfp-list'
 import '@vonage/vivid/header'
 import '@vonage/vivid/button'
+import GithubSignIn, { GithubSignInButton } from './components/github-signin'
+import { Roles } from './shared/roles'
 
 function App() {
   const [_, render] = useState<{}>()
@@ -26,6 +28,7 @@ function App() {
     remult.user = undefined
     render({})
   }
+
   if (_ === undefined) return <>loading</>
   return (
     <>
@@ -50,44 +53,46 @@ function App() {
                   appearance="filled"
                 ></vwc-button>
               </Link>
-              <Link to="/users">
-                <vwc-button
-                  size="condensed"
-                  label="Users"
-                  appearance="filled"
-                ></vwc-button>
-              </Link>
+              {remult.isAllowed(Roles.admin) && (
+                <Link to="/users">
+                  <vwc-button
+                    size="condensed"
+                    label="Users"
+                    appearance="filled"
+                  ></vwc-button>
+                </Link>
+              )}
             </div>
           </vwc-header>
         </>
       ) : (
         <>
-          <Link to="/signIn">
-            <vwc-button label="Sign In" appearance="filled"></vwc-button>
-          </Link>
+          <GithubSignInButton
+            signedIn={() => {
+              navigate('/')
+            }}
+          />
         </>
       )}
 
       <Routes>
-        <Route
-          path="/signIn"
-          element={
-            <SignIn
-              signedIn={() => {
-                render({})
-                navigate('/')
-              }}
-            />
-          }
-        />
-        {remult.authenticated() && (
+        {remult.isAllowed(Roles.admin) && (
           <>
             <Route path="/users" element={<Users />} />
             <Route path="/cfps/new" element={<EditCfp createNew={true} />} />
             <Route path="/cfps/:id" element={<EditCfp createNew={false} />} />
           </>
         )}
-
+        <Route
+          path="/github-signin"
+          element={
+            <GithubSignIn
+              signedIn={() => {
+                navigate('/')
+              }}
+            />
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/" element={<CFPList />} />
       </Routes>

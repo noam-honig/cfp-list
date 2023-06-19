@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { remult } from 'remult'
 import { User } from '../shared/user'
+
 import { useEffect, useState, useRef } from 'react'
 import { AuthController } from '../shared/auth-controller';
 import '@vonage/vivid/button';
@@ -33,6 +34,7 @@ async function resetUserPassword(user: User) {
   });
 }
 
+
 const userRepo = remult.repo(User)
 
 export function Users() {
@@ -48,16 +50,6 @@ export function Users() {
     return userRepo.liveQuery().subscribe((info) => setUsers(info.applyChanges))
   }, [])
 
-  async function addUser() {
-    const username = prompt('New username')
-    if (username != null) {
-      try {
-        await userRepo.insert({ username })
-      } catch (err: any) {
-        alert(err.message)
-      }
-    }
-  }
   return (
     <>
       <vwc-dialog id="alert"></vwc-dialog>
@@ -73,33 +65,28 @@ export function Users() {
       </vwc-dialog>
       <vwc-data-grid>
         <vwc-data-grid-row role="row" class="header" row-type="header">
-          <vwc-data-grid-cell cell-type="columnheader" 
-                              role="columnheader">
+          <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
             Username
           </vwc-data-grid-cell>
-          <vwc-data-grid-cell cell-type="columnheader" 
-                              role="columnheader">
-            
+          <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
+            admin
           </vwc-data-grid-cell>
         </vwc-data-grid-row>
-          {users.map((user) => {
-            return (
-              <vwc-data-grid-row key={user.id}>
 
-                <vwc-data-grid-cell>{user.username}</vwc-data-grid-cell>
-                <vwc-data-grid-cell>
-                  <vwc-button onClick={_ => resetUserPassword(user)} 
-                              label="Reset Password"
-                              connotation="cta"></vwc-button>
-                </vwc-data-grid-cell>
-              </vwc-data-grid-row>
-            )
-          })}
+        {users.map((user) => {
+          return (
+            <vwc-data-grid-row key={user.id}>
+              <vwc-data-grid-cell>{user.name}</vwc-data-grid-cell>
+              <vwc-data-grid-cell
+                onClick={() => userRepo.save({ ...user, admin: !user.admin })}
+              >
+                {(user.admin || false).toString()}
+              </vwc-data-grid-cell>
+            </vwc-data-grid-row>
+          )
+        })}
+
       </vwc-data-grid>
-      <vwc-button onClick={() => addUser()}
-                  label="Add user" 
-                  appearance="filled" 
-                  connotation="success"></vwc-button>
     </>
   )
 }
