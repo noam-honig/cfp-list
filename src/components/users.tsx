@@ -21,15 +21,19 @@ export function Users() {
           <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
             Username
           </vwc-data-grid-cell>
-          <vwc-data-grid-cell
-            cell-type="columnheader"
-            role="columnheader"
-          ></vwc-data-grid-cell>
+          <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
+            admin
+          </vwc-data-grid-cell>
         </vwc-data-grid-row>
         {users.map((user) => {
           return (
             <vwc-data-grid-row key={user.id}>
               <vwc-data-grid-cell>{user.name}</vwc-data-grid-cell>
+              <vwc-data-grid-cell
+                onClick={() => userRepo.save({ ...user, admin: !user.admin })}
+              >
+                {(user.admin || false).toString()}
+              </vwc-data-grid-cell>
             </vwc-data-grid-row>
           )
         })}
