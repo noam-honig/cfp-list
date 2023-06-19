@@ -98,11 +98,18 @@ function App() {
       </Routes>
       <br />
       <br />
-      <a href="https://github.com/noam-honig/cfp-list">
+      <a href="https://github.com/noam-honig/cfp-list"  target="_blank">
         <vwc-button
           label="improve this site on github"
           appearance="filled"
           icon="github-mono"
+        ></vwc-button>
+      </a>
+      <a href="https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H" target="_blank">
+        <vwc-button
+          label="join our whatsapp group"
+          appearance="filled"
+          icon="whatsapp-mono"
         ></vwc-button>
       </a>
     </>
