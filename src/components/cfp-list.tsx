@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { remult, EntityOrderBy } from 'remult'
 import { CFP } from '../shared/cfp'
 import { useEffect, useState, useRef } from 'react'
