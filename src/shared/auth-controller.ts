@@ -1,6 +1,5 @@
-import { Allow, BackendMethod, UserInfo, remult } from 'remult'
+import { Allow, BackendMethod, remult } from 'remult'
 import { User } from './user'
-import { generate, verify } from 'password-hash'
 import { setSessionUser } from '../server/server-session'
 import { Roles } from './roles'
 
