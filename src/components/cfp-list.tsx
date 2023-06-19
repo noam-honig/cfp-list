@@ -190,7 +190,15 @@ export function CFPList() {
                 <vwc-data-grid-cell>
                   {cfp.conferenceDate.toLocaleDateString('he-il')}
                 </vwc-data-grid-cell>
-                <vwc-data-grid-cell>
+                <vwc-data-grid-cell
+                  style={{
+                    backgroundColor:
+                      cfp.cfpDate?.valueOf() - new Date().valueOf() <
+                      86400000 * 7
+                        ? 'pink'
+                        : '',
+                  }}
+                >
                   <a href={cfp.cfpLink} target="_blank">
                     {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                   </a>
@@ -269,7 +277,15 @@ export function CFPList() {
                     <span className="cfp-property">Date: </span>
                     {cfp.conferenceDate.toLocaleDateString('he-il')}
                   </vwc-data-grid-cell>
-                  <vwc-data-grid-cell>
+                  <vwc-data-grid-cell
+                    style={{
+                      backgroundColor:
+                        cfp.cfpDate?.valueOf() - new Date().valueOf() <
+                        86400000 * 7
+                          ? 'pink'
+                          : '',
+                    }}
+                  >
                     <span className="cfp-property">CFP Deadline: </span>
                     <a href={cfp.cfpLink} target="_blank">
                       {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
