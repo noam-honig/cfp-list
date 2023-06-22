@@ -5,6 +5,7 @@ import { config } from 'dotenv'
 import { initRequest } from './server-session'
 import { createPostgresWithSchemaDataProvider } from './postgres-with-schema'
 import { CFP } from '../shared/cfp'
+
 config()
 
 const entities = [User, CFP]
@@ -17,5 +18,10 @@ export const api = remultExpress({
     if (process.env['NODE_ENV'] === 'production')
       return createPostgresWithSchemaDataProvider('cfp', entities)
     return undefined //use the basic json db for dev
+  },
+  initApi:async () => {
+    
+    console.log((await CFP.getOgInfo("https://events.linuxfoundation.org/openssf-day-europe/")))
+
   },
 })

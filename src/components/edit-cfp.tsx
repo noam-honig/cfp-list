@@ -40,8 +40,8 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
         <vwc-layout gutters="small" column-basis="medium">
           {(
             [
-              'conferenceName',
               'link',
+              'conferenceName',
               'location',
               'cfpLink',
               'conferenceDate',
@@ -56,6 +56,30 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
             const value = meta.toInput(cfp[key])
             const error = errors?.modelState?.[key]
             const setValue = (what: string) => {
+              if (key === 'link') {
+                if (what != cfp.link) {
+                  CFP.getOgInfo(what)
+                    .then((i) => {
+                      setCfp((current) => {
+                        let result = { ...current! }
+                        if (!result.conferenceName)
+                          result.conferenceName = i.title!
+                        if (!result.image) result.image = i.image
+                        if (!result.notes) result.notes = i.description!
+                        return result
+                      })
+                    })
+                    .catch((err) => {
+                      console.log(err)
+                      if (!cfp.conferenceName) {
+                        setCfp({
+                          ...cfp,
+                          conferenceName: 'Failed to get og info',
+                        })
+                      }
+                    })
+                }
+              }
               setCfp({ ...cfp, [key]: meta.fromInput(what) })
             }
 

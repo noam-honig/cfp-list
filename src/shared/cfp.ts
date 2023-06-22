@@ -1,5 +1,6 @@
 import {
   Allow,
+  BackendMethod,
   Entity,
   FieldRef,
   Fields,
@@ -36,7 +37,7 @@ export class CFP {
   conferenceName = ''
   @Fields.string()
   image = ''
-  @Fields.string()
+  @Fields.string({ caption: 'Conference Url' })
   link = ''
   @Fields.string()
   location = ''
@@ -62,6 +63,18 @@ export class CFP {
     allowApiUpdate: false,
   })
   createUserId = ''
+
+  @BackendMethod({ allowed: Allow.authenticated })
+  static async getOgInfo(url: string) {
+    const ogs = await import('open-graph-scraper')
+    const r = (await ogs.default({ url })).result
+
+    return {
+      title: r.ogTitle,
+      description: r.ogDescription,
+      image: r.ogImage && r.ogImage.length > 0 ? r.ogImage[0].url : '',
+    }
+  }
 }
 
 export function validateDate(_: any, fieldRef: FieldRef<any, Date>) {
