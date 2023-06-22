@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), express('src/server')],
   build: {
     rollupOptions: {
-      external: ["node-fetch"],
+      external: ['node-fetch', 'open-graph-scraper'],
     },
   },
 })
