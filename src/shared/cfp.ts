@@ -73,6 +73,13 @@ export class CFP {
       title: r.ogTitle,
       description: r.ogDescription,
       image: r.ogImage && r.ogImage.length > 0 ? r.ogImage[0].url : '',
+      thereIsAMatchingCfpInDb: (
+        await remult.repo(CFP).findFirst({
+          link: {
+            $contains: url.trim(),
+          },
+        })
+      ).conferenceName,
     }
   }
 }

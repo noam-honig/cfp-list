@@ -58,8 +58,15 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
             const setValue = (what: string) => {
               if (key === 'link') {
                 if (what != cfp.link) {
-                  CFP.getOgInfo(what)
+                  CFP.getOgInfo(what.trim())
                     .then((i) => {
+                      if (i.thereIsAMatchingCfpInDb && createNew) {
+                        setTimeout(() => {
+                          alert(`There is a cfp with a similar link in the db called: ${i.thereIsAMatchingCfpInDb}.
+  Please Make sure that this is not a duplicate before adding it
+                            `)
+                        }, 100)
+                      }
                       setCfp((current) => {
                         let result = { ...current! }
                         if (!result.conferenceName)
