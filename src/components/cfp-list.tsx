@@ -13,8 +13,6 @@ import '@vonage/vivid/dialog'
 import type { Dialog } from '@vonage/vivid/lib/dialog/dialog'
 import type { Button } from '@vonage/vivid/lib/button/button'
 
-import { Roles } from '../shared/roles'
-
 const cfpRepo = remult.repo(CFP)
 
 async function deleteCfp(cfp: CFP) {
