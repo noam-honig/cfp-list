@@ -1,5 +1,6 @@
 import React, { useState, DOMAttributes } from 'react'
 
+
 import './alert.js'
 
 type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: any }>
@@ -8,6 +9,8 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       ['vwc-button']: CustomElement<any>
+      // un comment for better typing if you want
+      //['vwc-button']: CustomElement<import ('@vonage/vivid/lib/button/button').Button>
       ['vwc-header']: CustomElement<any>
       ['vwc-card']: CustomElement<any>
       ['vwc-layout']: CustomElement<any>
