@@ -207,7 +207,7 @@ export function CFPList() {
                 <vwc-data-grid-cell>{cfp.notes}</vwc-data-grid-cell>
                 {remult.authenticated() && (
                   <vwc-data-grid-cell>
-                    {cfpRepo.metadata.apiUpdateAllowed() && (
+                    {cfpRepo.metadata.apiUpdateAllowed(cfp) && (
                       <Link to={'/cfps/' + cfp.id}>
                         <vwc-button
                           size="super-condensed"
@@ -217,7 +217,7 @@ export function CFPList() {
                         ></vwc-button>
                       </Link>
                     )}
-                    {cfpRepo.metadata.apiDeleteAllowed() && (
+                    {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
                       <a
                         href=""
                         onClick={(e) => {
@@ -297,7 +297,7 @@ export function CFPList() {
                   </vwc-data-grid-cell>
                   {remult.authenticated() && (
                     <vwc-data-grid-cell>
-                      {cfpRepo.metadata.apiUpdateAllowed() && (
+                      {cfpRepo.metadata.apiUpdateAllowed(cfp) && (
                         <Link to={'/cfps/' + cfp.id}>
                           <vwc-button
                             size="super-condensed"
@@ -307,7 +307,7 @@ export function CFPList() {
                           ></vwc-button>
                         </Link>
                       )}
-                      {cfpRepo.metadata.apiDeleteAllowed() && (
+                      {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
                         <a
                           href=""
                           onClick={(e) => {

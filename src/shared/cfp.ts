@@ -1,9 +1,28 @@
-import { Allow, Entity, FieldRef, Fields, Validators, remult } from 'remult'
+import {
+  Allow,
+  Entity,
+  FieldRef,
+  Fields,
+  Validators,
+  getEntityRef,
+  remult,
+} from 'remult'
 import { Roles } from './roles'
 
 @Entity<CFP>('cfps', {
-  allowApiCrud: Roles.admin,
+  allowApiCrud: Allow.authenticated,
   allowApiRead: Allow.everyone,
+  allowApiDelete: (cfp) =>
+    remult.isAllowed(Roles.admin) ||
+    (remult.authenticated() && cfp?.createUserId === remult.user!.id),
+  allowApiUpdate: (cfp) =>
+    remult.isAllowed(Roles.admin) ||
+    (remult.authenticated() && cfp?.createUserId === remult.user!.id),
+  saving: (cfp) => {
+    if (getEntityRef(cfp).isNew()) {
+      cfp.createUserId = remult.user!.id
+    }
+  },
   defaultOrderBy: {
     cfpDate: 'asc',
   },
@@ -34,16 +53,15 @@ export class CFP {
   @Fields.string()
   coverExpanses = ''
   @Fields.string()
-  whoReported = ''
+  whoReported = remult.user?.name || ''
   @Fields.string()
   notes = ''
   @Fields.createdAt()
   createdAt = new Date()
-
   @Fields.string({
-    serverExpression: () => JSON.stringify(remult.user),
+    allowApiUpdate: false,
   })
-  test = ''
+  createUserId = ''
 }
 
 export function validateDate(_: any, fieldRef: FieldRef<any, Date>) {

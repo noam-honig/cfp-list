@@ -10,7 +10,10 @@
     "coverExpanses": "Unknown",
     "whoReported": "Yonatan Kra",
     "notes": "",
-    "createdAt": "2023-06-10T05:44:25.466Z"
+    "createdAt": "2023-06-10T05:44:25.466Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "cliply9te0001igr3568q8ywt",
@@ -23,7 +26,10 @@
     "coverExpanses": "Yes",
     "whoReported": "Liran Tal",
     "notes": "",
-    "createdAt": "2023-06-10T06:20:53.426Z"
+    "createdAt": "2023-06-10T06:20:53.426Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "cliplzd0m0002igr397cs2iva",
@@ -36,7 +42,10 @@
     "coverExpanses": "Up to 500 euro",
     "whoReported": "Yonatan Kra",
     "notes": "Recommended!",
-    "createdAt": "2023-06-10T06:21:44.230Z"
+    "createdAt": "2023-06-10T06:21:44.230Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipm7coy0003igr3a73abtw7",
@@ -49,7 +58,10 @@
     "coverExpanses": "Yes",
     "whoReported": "Gilad Shaham",
     "notes": "\"20.10 - in person + remote\n23.10 - remote only\"",
-    "createdAt": "2023-06-10T06:27:57.058Z"
+    "createdAt": "2023-06-10T06:27:57.058Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipm9x2a0004igr34w105smf",
@@ -62,7 +74,10 @@
     "coverExpanses": "Yes",
     "whoReported": "Evyatar Alush",
     "notes": "",
-    "createdAt": "2023-06-10T06:29:56.770Z"
+    "createdAt": "2023-06-10T06:29:56.770Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipmawst0005igr3gb552jf6",
@@ -75,7 +90,10 @@
     "coverExpanses": "Unknown",
     "whoReported": "Yonatan Kra",
     "notes": "כנס על אבטחה ב-open source",
-    "createdAt": "2023-06-10T06:30:43.085Z"
+    "createdAt": "2023-06-10T06:30:43.085Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipmeaxb0006igr31fjoc379",
@@ -88,7 +106,10 @@
     "coverExpanses": "Online",
     "whoReported": "Yonatan Kra",
     "notes": "ההרצאות מוקלטות מראש",
-    "createdAt": "2023-06-10T06:33:21.359Z"
+    "createdAt": "2023-06-10T06:33:21.359Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipmf7710007igr3esb7bcdx",
@@ -101,7 +122,10 @@
     "coverExpanses": "",
     "whoReported": "Yoni Goldberg",
     "notes": "",
-    "createdAt": "2023-06-10T06:34:03.181Z"
+    "createdAt": "2023-06-10T06:34:03.181Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipmqwyd0009igr3cf4q3ycf",
@@ -114,7 +138,10 @@
     "coverExpanses": "",
     "whoReported": "",
     "notes": "",
-    "createdAt": "2023-06-10T06:43:09.781Z"
+    "createdAt": "2023-06-10T06:43:09.781Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
   },
   {
     "id": "clipmrf0e000aigr354oafhb9",
@@ -127,6 +154,25 @@
     "coverExpanses": "",
     "whoReported": "",
     "notes": "",
-    "createdAt": "2023-06-10T06:43:33.182Z"
+    "createdAt": "2023-06-10T06:43:33.182Z",
+    "image": "",
+    "createUserId": "",
+    "createUserName": ""
+  },
+  {
+    "id": "clj7d2kki0000b8r3287c6u7q",
+    "conferenceName": "45456",
+    "image": "",
+    "link": "",
+    "location": "",
+    "conferenceDate": "2023-06-22",
+    "cfpDate": "2023-06-22",
+    "cfpLink": "",
+    "coverExpanses": "",
+    "whoReported": "",
+    "notes": "",
+    "createdAt": "2023-06-22T16:32:08.611Z",
+    "createUserId": "",
+    "createUserName": ""
   }
 ]

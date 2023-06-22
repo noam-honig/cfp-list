@@ -77,8 +77,10 @@ function App() {
 
       <Routes>
         {remult.isAllowed(Roles.admin) && (
+          <Route path="/users" element={<Users />} />
+        )}
+        {remult.authenticated() && (
           <>
-            <Route path="/users" element={<Users />} />
             <Route path="/cfps/new" element={<EditCfp createNew={true} />} />
             <Route path="/cfps/:id" element={<EditCfp createNew={false} />} />
           </>
@@ -98,14 +100,17 @@ function App() {
       </Routes>
       <br />
       <br />
-      <a href="https://github.com/noam-honig/cfp-list"  target="_blank">
+      <a href="https://github.com/noam-honig/cfp-list" target="_blank">
         <vwc-button
           label="improve this site on github"
           appearance="filled"
           icon="github-mono"
         ></vwc-button>
       </a>
-      <a href="https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H" target="_blank">
+      <a
+        href="https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H"
+        target="_blank"
+      >
         <vwc-button
           label="join our whatsapp group"
           appearance="filled"

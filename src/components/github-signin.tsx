@@ -25,7 +25,15 @@ export function GithubSignInButton({ signedIn }: { signedIn: VoidFunction }) {
 
   if (githubSignInUrl !== AUTH_ON_DEV) {
     // if production use
-    return <a href={githubSignInUrl}>sign in with github</a>
+    return (
+      <a href={githubSignInUrl}>
+        <vwc-button
+          label="Sign in with github, to add cfps"
+          appearance="filled"
+          icon="github-mono"
+        ></vwc-button>
+      </a>
+    )
   }
 
   async function signInOnDevEnvironment() {
