@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { FormEvent, useEffect, useState } from 'react'
 import { CFP } from '../shared/cfp'
 import { ErrorInfo, remult } from 'remult'
@@ -37,7 +36,7 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
 
   return (
     <vwc-card headline="Edit Conference">
-      <form class="edit-cfp" slot="footer" onSubmit={save}>
+      <form className="edit-cfp" slot="footer" onSubmit={save}>
         <vwc-layout gutters="small" column-basis="medium">
           {(
             [
@@ -66,7 +65,9 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
                   <vwc-text-area
                     label="Notes"
                     value={value}
-                    onBlur={(e) => setValue(e.target.value)}
+                    onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setValue(e.target.value)
+                    }
                   ></vwc-text-area>
                 ) : (
                   <>
@@ -74,14 +75,18 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
                       <vwc-number-field
                         label={meta.caption}
                         value={value}
-                        onBlur={(e) => setValue(e.target.value)}
+                        onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setValue(e.target.value)
+                        }
                       ></vwc-number-field>
                     ) : (
                       <vwc-text-field
                         type={meta.inputType}
                         label={meta.caption}
                         value={value}
-                        onBlur={(e) => setValue(e.target.value)}
+                        onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setValue(e.target.value)
+                        }
                       ></vwc-text-field>
                     )}
                   </>

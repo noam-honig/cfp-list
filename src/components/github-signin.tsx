@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { AUTH_ON_DEV, AuthController } from '../shared/auth-controller'

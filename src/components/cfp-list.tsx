@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { remult, EntityOrderBy } from 'remult'
 import { CFP } from '../shared/cfp'
 import { useEffect, useState, useRef } from 'react'
@@ -72,12 +71,12 @@ export function CFPList() {
           <vwc-button
             appearance="outlined"
             label="Cancel"
-            onClick={(e) => confirmButtonClick(e)}
+            onClick={(e: any) => confirmButtonClick(e)}
           ></vwc-button>
           <vwc-button
             appearance="filled"
             label="Yes"
-            onClick={(e) => confirmButtonClick(e)}
+            onClick={(e: any) => confirmButtonClick(e)}
           ></vwc-button>
         </div>
       </vwc-dialog>
@@ -87,7 +86,7 @@ export function CFPList() {
           name="showOverdueCfps"
           type="checkbox"
           checked={showOverdueCfps}
-          onClick={(e) => setShowOverdueCfps(e.target.checked)}
+          onClick={(e: any) => setShowOverdueCfps(e.target.checked)}
         ></vwc-checkbox>
 
         <vwc-action-group role="radiogroup" aria-label="List Display Type">

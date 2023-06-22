@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useMemo, useState } from 'react'
 import { AuthController } from './shared/auth-controller'
 import { remult } from 'remult'
