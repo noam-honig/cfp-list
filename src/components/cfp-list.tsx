@@ -9,45 +9,36 @@ import '@vonage/vivid/button'
 import '@vonage/vivid/action-group'
 import '@vonage/vivid/layout'
 import '@vonage/vivid/card'
-import '@vonage/vivid/dialog'
-import type { Dialog } from '@vonage/vivid/lib/dialog/dialog'
-import type { Button } from '@vonage/vivid/lib/button/button'
+import { Confirm } from './confirm';
 
 const cfpRepo = remult.repo(CFP)
 
-async function deleteCfp(cfp: CFP) {
-  const dialog = document.getElementById('confirm') as Dialog
-  dialog.headline = 'Delete CFP'
-  dialog.subtitle = `Are you sure you want to delete ${cfp.conferenceName}?`
-  dialog.showModal()
-  return new Promise((resolve, reject) => {
-    dialog.addEventListener('close', async (_) => {
-      if (dialog.returnValue === 'Yes') {
-        try {
-          resolve(await cfpRepo.delete(cfp))
-        } catch (error: any) {
-          reject(error.message)
-        }
-      }
-    })
-  })
-}
-
 export function CFPList() {
-  const [cfps, setCfps] = useState<CFP[]>([])
-  const [showOverdueCfps, setShowOverdueCfps] = useState(false)
-  const [viewModeState, setViewModeState] = useState('table')
-  const confirmRef = useRef<Dialog>(null)
+  const [cfps, setCurrentCfps] = useState<CFP[]>([])
+  const [showOverdueCfps, setShowOverdueCfps] = useState(false);
+  const [viewModeState, setViewModeState] = useState('table');
+  const [confirmOpenState, setConfirmOpenState] = useState(false);
+  const confirmHeadline = 'Delete CFP';
+  const confirmSubtitle = '';
+  const selectedCfp = useRef<CFP | null>(null);
+  
+  const deleteCfp = async (confirmValue: string) => {
+    if (selectedCfp.current !== null && confirmValue === 'Yes') {
+      try {
+        await cfpRepo.delete(selectedCfp.current)
+      } catch (error: any) {
+        console.error(error.message)
+      }
+    }
+    selectedCfp.current = null;
+    setConfirmOpenState(false);
+  }
+
   const [orderBy, setOrderBy] = useState<EntityOrderBy<CFP>>({
     cfpDate: 'asc',
     conferenceDate: 'asc',
   })
-  const confirmButtonClick = ({ target }: { target: Button }) => {
-    if (confirmRef && confirmRef.current) {
-      confirmRef.current.returnValue = target.label as string
-      confirmRef?.current?.close()
-    }
-  }
+
   useEffect(() => {
     return cfpRepo
       .liveQuery({
@@ -60,24 +51,14 @@ export function CFPList() {
               },
             },
       })
-      .subscribe((info) => setCfps(info.applyChanges))
+      .subscribe((info) => setCurrentCfps(info.applyChanges))
   }, [orderBy, showOverdueCfps])
   return (
     <>
-      <vwc-dialog id="confirm" ref={confirmRef}>
-        <div slot="footer">
-          <vwc-button
-            appearance="outlined"
-            label="Cancel"
-            onClick={(e: any) => confirmButtonClick(e)}
-          ></vwc-button>
-          <vwc-button
-            appearance="filled"
-            label="Yes"
-            onClick={(e: any) => confirmButtonClick(e)}
-          ></vwc-button>
-        </div>
-      </vwc-dialog>
+      <Confirm headline={confirmHeadline}
+            subtitle={confirmSubtitle}  
+            onClose={deleteCfp}
+            open={confirmOpenState}/>
       <div>
         <vwc-checkbox
           label="Show overdue CFPs"
@@ -202,20 +183,16 @@ export function CFPList() {
                       </Link>
                     )}
                     {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
-                      <a
-                        href=""
-                        onClick={(e) => {
-                          e.preventDefault()
-                          deleteCfp(cfp)
-                        }}
-                      >
                         <vwc-button
                           size="super-condensed"
                           connotation="alert"
                           appearance="filled"
                           label="Delete"
+                          onClick={() => {
+                            selectedCfp.current = cfp;
+                            setConfirmOpenState(true);
+                          }}
                         ></vwc-button>
-                      </a>
                     )}
                   </vwc-data-grid-cell>
                 )}
@@ -292,20 +269,16 @@ export function CFPList() {
                         </Link>
                       )}
                       {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
-                        <a
-                          href=""
-                          onClick={(e) => {
-                            e.preventDefault()
-                            deleteCfp(cfp)
-                          }}
-                        >
                           <vwc-button
                             size="super-condensed"
                             connotation="alert"
                             appearance="filled"
                             label="Delete"
+                            onClick={(e: Event) => {
+                              selectedCfp.current = cfp;
+                              setConfirmOpenState(true);
+                            }}
                           ></vwc-button>
-                        </a>
                       )}
                     </vwc-data-grid-cell>
                   )}
