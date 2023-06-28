@@ -85,6 +85,7 @@ export function CFPList() {
           type="checkbox"
           checked={showOverdueCfps}
           onClick={(e: any) => setShowOverdueCfps(e.target.checked)}
+          onKeyPress={(e: any) => setShowOverdueCfps(e.target.checked)}
         ></vwc-checkbox>
 
         <vwc-action-group role="radiogroup" aria-label="List Display Type">
