@@ -159,19 +159,6 @@ export function CFPList() {
           </vwc-data-grid-row>
 
           {cfps.map((cfp) => {
-            async function deleteCfp() {
-              try {
-                if (
-                  confirm(
-                    'Are you sure you want to delete ' + cfp.conferenceName
-                  )
-                ) {
-                  await cfpRepo.delete(cfp)
-                }
-              } catch (error: any) {
-                alert(error.message)
-              }
-            }
             return (
               <vwc-data-grid-row key={cfp.id}>
                 <vwc-data-grid-cell>
@@ -219,7 +206,7 @@ export function CFPList() {
                         href=""
                         onClick={(e) => {
                           e.preventDefault()
-                          deleteCfp()
+                          deleteCfp(cfp)
                         }}
                       >
                         <vwc-button
