@@ -22,6 +22,10 @@ export function CFPList() {
   const confirmSubtitle = '';
   const selectedCfp = useRef<CFP | null>(null);
   
+  const confirmCfpDeletion = (cfp: CFP) => {
+    selectedCfp.current = cfp;
+    setConfirmOpenState(true);
+  }
   const deleteCfp = async (confirmValue: string) => {
     if (selectedCfp.current !== null && confirmValue === 'Yes') {
       try {
@@ -188,10 +192,7 @@ export function CFPList() {
                           connotation="alert"
                           appearance="filled"
                           label="Delete"
-                          onClick={() => {
-                            selectedCfp.current = cfp;
-                            setConfirmOpenState(true);
-                          }}
+                          onClick={() => confirmCfpDeletion(cfp)}
                         ></vwc-button>
                     )}
                   </vwc-data-grid-cell>
@@ -274,10 +275,7 @@ export function CFPList() {
                             connotation="alert"
                             appearance="filled"
                             label="Delete"
-                            onClick={(e: Event) => {
-                              selectedCfp.current = cfp;
-                              setConfirmOpenState(true);
-                            }}
+                            onClick={() => confirmCfpDeletion(cfp)}
                           ></vwc-button>
                       )}
                     </vwc-data-grid-cell>
