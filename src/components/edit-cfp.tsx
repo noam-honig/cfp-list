@@ -35,7 +35,7 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
   if (!cfp) return <>loading</>
 
   return (
-    <vwc-card headline="Edit Conference">
+    <vwc-card headline="Edit Conference" class="edit-cfp-card">
       <form className="edit-cfp" slot="footer" onSubmit={save}>
         <vwc-layout gutters="small" column-basis="medium">
           {(
@@ -127,15 +127,17 @@ export default function EditCfp({ createNew }: { createNew: boolean }) {
             )
           })}
         </vwc-layout>
+        <vwc-action-group appearance='ghost' class="edit-cfp-buttons">
+          <Link to="/">
+            <vwc-button label="Cancel" appearance="filled"></vwc-button>
+          </Link>
         <vwc-button
           label="Save"
           type="submit"
           appearance="filled"
           connotation="success"
         ></vwc-button>
-        <Link to="/">
-          <vwc-button label="Cancel" appearance="filled"></vwc-button>
-        </Link>
+        </vwc-action-group>
       </form>
     </vwc-card>
   )
