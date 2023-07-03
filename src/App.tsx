@@ -102,7 +102,7 @@ function App() {
         <Route path="/" element={<CFPList />} />
       </Routes>
 
-      <div class='buttons-wrapper'>
+      <div className='buttons-wrapper'>
         <a href="https://github.com/noam-honig/cfp-list" target="_blank">
           <vwc-button
             label="improve this site on github"
