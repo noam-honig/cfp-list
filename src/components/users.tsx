@@ -25,21 +25,6 @@ export function Users() {
 
   return (
     <>
-      <vwc-dialog id="alert"></vwc-dialog>
-      <vwc-dialog id="confirm" ref={confirmRef}>
-        <div slot="footer">
-          <vwc-button
-            appearance="outlined"
-            label="Cancel"
-            onClick={(e: any) => confirmButtonClick(e)}
-          ></vwc-button>
-          <vwc-button
-            appearance="filled"
-            label="Yes"
-            onClick={(e: any) => confirmButtonClick(e)}
-          ></vwc-button>
-        </div>
-      </vwc-dialog>
       <vwc-data-grid>
         <vwc-data-grid-row role="row" class="header" row-type="header">
           <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
