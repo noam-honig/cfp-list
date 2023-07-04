@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Dialog } from '@vonage/vivid/lib/dialog/dialog';
 import type { Button } from '@vonage/vivid/lib/button/button';
 import '@vonage/vivid/dialog';
