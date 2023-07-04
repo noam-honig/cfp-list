@@ -79,7 +79,7 @@ export class CFP {
             $contains: url.trim(),
           },
         })
-      ).conferenceName,
+      )?.conferenceName,
     }
   }
 }

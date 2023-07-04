@@ -63,15 +63,7 @@ export function CFPList() {
             subtitle={confirmSubtitle}  
             onClose={deleteCfp}
             open={confirmOpenState}/>
-      <div>
-        <vwc-checkbox
-          label="Show overdue CFPs"
-          name="showOverdueCfps"
-          type="checkbox"
-          checked={showOverdueCfps}
-          onClick={(e: any) => setShowOverdueCfps(e.target.checked)}
-        ></vwc-checkbox>
-
+      <vwc-action-group appearance='ghost'>
         <vwc-action-group role="radiogroup" aria-label="List Display Type">
           {[
             {
@@ -95,8 +87,9 @@ export function CFPList() {
                 tabindex="0"
                 aria-label={viewMode.label}
                 appearance={
-                  viewMode.name === viewModeState ? 'filled' : 'outline'
+                  viewMode.name === viewModeState ? 'filled' : 'ghost'
                 }
+                size="condensed"
                 onClick={() => {
                   setViewModeState(viewMode.name)
                 }}
@@ -104,9 +97,18 @@ export function CFPList() {
             )
           })}
         </vwc-action-group>
-      </div>
+        <vwc-checkbox
+          label="Show overdue CFPs"
+          name="showOverdueCfps"
+          type="checkbox"
+          checked={showOverdueCfps}
+          onClick={(e: any) => setShowOverdueCfps(e.target.checked)}
+          class="view-option"
+        ></vwc-checkbox>
+      </vwc-action-group>
       {viewModeState === 'table' ? (
-        <vwc-data-grid>
+        <div className="table-wrapper">
+          <vwc-data-grid>
           <vwc-data-grid-row role="row" class="header" row-type="header">
             {(
               [
@@ -133,8 +135,8 @@ export function CFPList() {
                   key={key}
                   onClick={sortByMe}
                 >
-                  {meta.caption}{' '}
-                  {sort == 'asc' ? '\\/' : sort == 'desc' ? '/\\' : ''}
+                  <span className="table-text">{meta.caption}{' '}</span>
+                  <span className="table-sort">{sort == 'asc' ? '\\/' : sort == 'desc' ? '/\\' : ''}</span>
                 </vwc-data-grid-cell>
               )
             })}
@@ -148,7 +150,7 @@ export function CFPList() {
               <vwc-data-grid-row key={cfp.id}>
                 <vwc-data-grid-cell>
                   {cfp.link ? (
-                    <a href={cfp.link} target="_blank">
+                    <a href={cfp.link} target="_blank" className="table-text">
                       {cfp.conferenceName}
                     </a>
                   ) : (
@@ -164,7 +166,7 @@ export function CFPList() {
                     backgroundColor:
                       cfp.cfpDate?.valueOf() - new Date().valueOf() <
                       86400000 * 7
-                        ? 'pink'
+                        ? 'var(--vvd-color-warning-100)'
                         : '',
                   }}
                 >
@@ -172,8 +174,8 @@ export function CFPList() {
                     {cfp.cfpDate.toLocaleDateString('he-il')}- Submit
                   </a>
                 </vwc-data-grid-cell>
-                <vwc-data-grid-cell>{cfp.coverExpanses}</vwc-data-grid-cell>
-                <vwc-data-grid-cell>{cfp.notes}</vwc-data-grid-cell>
+                <vwc-data-grid-cell><span className="table-text">{cfp.coverExpanses}</span></vwc-data-grid-cell>
+                <vwc-data-grid-cell><span className="table-text">{cfp.notes}</span></vwc-data-grid-cell>
                 {remult.authenticated() && (
                   <vwc-data-grid-cell>
                     {cfpRepo.metadata.apiUpdateAllowed(cfp) && (
@@ -201,6 +203,7 @@ export function CFPList() {
             )
           })}
         </vwc-data-grid>
+        </div>
       ) : (
         <vwc-layout>
           {cfps.map((cfp) => {
@@ -244,7 +247,7 @@ export function CFPList() {
                       backgroundColor:
                         cfp.cfpDate?.valueOf() - new Date().valueOf() <
                         86400000 * 7
-                          ? 'pink'
+                          ? 'var(--vvd-color-warning-100)'
                           : '',
                     }}
                   >
@@ -292,6 +295,7 @@ export function CFPList() {
             connotation="cta"
             appearance="filled"
             label="Add Cfp"
+            icon="plus-solid"
           ></vwc-button>
         </Link>
       )}

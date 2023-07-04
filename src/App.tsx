@@ -35,8 +35,9 @@ function App() {
         <>
           <vwc-header alternate>
             <div className="info" slot="action-items">
-              Hello {remult.user?.name}
+              <span>Hello {remult.user?.name}</span>
               <vwc-button
+                className="info-button"
                 onClick={signOut}
                 label="Sign Out"
                 connotation="alert"
@@ -64,16 +65,19 @@ function App() {
             </div>
           </vwc-header>
         </>
+
       ) : (
         <>
+
           <GithubSignInButton
             signedIn={() => {
               navigate('/')
             }}
           />
+
         </>
       )}
-
+      <vwc-layout column-basis="block" gutters="small" column-spacing="small" class="layout">
       <Routes>
         {remult.isAllowed(Roles.admin) && (
           <Route path="/users" element={<Users />} />
@@ -97,25 +101,27 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/" element={<CFPList />} />
       </Routes>
-      <br />
-      <br />
-      <a href="https://github.com/noam-honig/cfp-list" target="_blank">
-        <vwc-button
-          label="improve this site on github"
-          appearance="filled"
-          icon="github-mono"
-        ></vwc-button>
-      </a>
-      <a
-        href="https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H"
-        target="_blank"
-      >
-        <vwc-button
-          label="join our whatsapp group"
-          appearance="filled"
-          icon="whatsapp-mono"
-        ></vwc-button>
-      </a>
+
+      <div className='buttons-wrapper'>
+        <a href="https://github.com/noam-honig/cfp-list" target="_blank">
+          <vwc-button
+            label="improve this site on github"
+            appearance="filled"
+            icon="github-mono"
+          ></vwc-button>
+        </a>
+        <a
+          href="https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H"
+          target="_blank"
+        >
+          <vwc-button
+            label="join our whatsapp group"
+            appearance="filled"
+            icon="whatsapp-mono"
+          ></vwc-button>
+        </a>
+      </div>
+      </vwc-layout>
     </>
   )
 }
