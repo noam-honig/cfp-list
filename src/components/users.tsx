@@ -1,24 +1,16 @@
 import { remult } from 'remult'
 import { User } from '../shared/user'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import '@vonage/vivid/button'
 import '@vonage/vivid/data-grid'
 import '@vonage/vivid/dialog'
-import { Dialog } from '@vonage/vivid/lib/dialog/dialog'
-import { Button } from '@vonage/vivid/lib/button/button'
 
 const userRepo = remult.repo(User)
 
 export function Users() {
   const [users, setUsers] = useState<User[]>([])
-  const confirmRef = useRef<Dialog>(null)
-  const confirmButtonClick = ({ target }: { target: Button }) => {
-    if (confirmRef && confirmRef.current) {
-      confirmRef.current.returnValue = target.label as string
-      confirmRef?.current?.close()
-    }
-  }
+
   useEffect(() => {
     return userRepo.liveQuery().subscribe((info) => setUsers(info.applyChanges))
   }, [])

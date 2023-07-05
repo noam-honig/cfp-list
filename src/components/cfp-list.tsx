@@ -141,7 +141,7 @@ export function CFPList() {
               )
             })}
             {remult.authenticated() && (
-              <vwc-data-grid-cell></vwc-data-grid-cell>
+              <vwc-data-grid-cell><span>{" "}</span></vwc-data-grid-cell>
             )}
           </vwc-data-grid-row>
 

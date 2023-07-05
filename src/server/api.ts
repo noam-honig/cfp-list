@@ -20,8 +20,5 @@ export const api = remultExpress({
     return undefined //use the basic json db for dev
   },
   initApi:async () => {
-    
-    console.log((await CFP.getOgInfo("https://events.linuxfoundation.org/openssf-day-europe/")))
-
   },
 })
