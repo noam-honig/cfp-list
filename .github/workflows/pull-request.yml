@@ -10,7 +10,7 @@ on:
       - converted_to_draft
     branches:
       ["master"]
-   push: 
+  push: 
     branches: ["master"]
 
 concurrency:
