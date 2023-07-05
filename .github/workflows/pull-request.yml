@@ -9,7 +9,8 @@ on:
       - ready_for_review
       - converted_to_draft
     branches:
-      - main
+      - master
+  posh: ["master"]
 
 concurrency:
   group: ci-tests-${{ github.ref }}-1
@@ -17,14 +18,14 @@ concurrency:
 
 jobs:
   deps-cache:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
           cache: "npm"
 
       - uses: actions/cache@v3
@@ -39,12 +40,12 @@ jobs:
 
   build:
     needs: deps-cache
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v3
         - uses: actions/setup-node@v3
           with:
-            node-version: "16"
+            node-version: "18"
 
         - uses: actions/cache@v3
           id: cache
