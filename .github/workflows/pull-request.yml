@@ -10,7 +10,8 @@ on:
       - converted_to_draft
     branches:
       - master
-  # push: ["master"]
+   push: 
+    branches: ["master"]
 
 concurrency:
   group: ci-tests-${{ github.ref }}-1
