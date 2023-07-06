@@ -2,13 +2,14 @@ import {
   Allow,
   BackendMethod,
   Entity,
-  FieldRef,
   Fields,
   Validators,
   getEntityRef,
   remult,
 } from 'remult'
 import { Roles } from './roles'
+import { validateDate } from './utils';
+import { UserSelectionField, getUserSelectionFilter } from './UserSelection';
 
 @Entity<CFP>('cfps', {
   allowApiCrud: Allow.authenticated,
@@ -64,11 +65,26 @@ export class CFP {
   })
   createUserId = ''
 
+  @UserSelectionField("starred")
+  starred = false
+  @UserSelectionField("hidden")
+  hidden = false
+  @UserSelectionField("submitted")
+  submitted = false
+
+  static filterStarred = getUserSelectionFilter("starred")
+  static filterHidden = getUserSelectionFilter("hidden")
+  static filterSubmitted = getUserSelectionFilter("submitted")
+
+
+
+
   @BackendMethod({ allowed: Allow.authenticated })
-  static async getOgInfo(url: string) {
+  static async getEventOpenGraphInfo(url: string) {
     const ogs = await import('open-graph-scraper')
     const r = (await ogs.default({ url })).result
-
+    //[ ] improve open graph extraction for problems we had
+    //[ ] with a link to a cfp, return correct open graph comments, so it'll share well on whatsapp
     return {
       title: r.ogTitle,
       description: r.ogDescription,
@@ -84,7 +100,5 @@ export class CFP {
   }
 }
 
-export function validateDate(_: any, fieldRef: FieldRef<any, Date>) {
-  if (!fieldRef.value || fieldRef.value.getFullYear() < 1900)
-    throw new Error('Invalid Date')
-}
+
+export const cfpRepo = remult.repo(CFP)

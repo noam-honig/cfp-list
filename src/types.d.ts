@@ -23,6 +23,12 @@ declare global {
       ['vwc-data-grid']: CustomElement<any>
       ['vwc-data-grid-row']: CustomElement<any>
       ['vwc-data-grid-cell']: CustomElement<any>
+      ['vwc-icon']: CustomElement<any>
+      ['vwc-fab']: CustomElement<any>
+      ['vwc-side-drawer']: CustomElement<any>
+      ['vwc-menu-item']: CustomElement<any>
+      ['vwc-menu']: CustomElement<any>
+      ['vwc-switch']:CustomElement<any>
     }
   }
 }

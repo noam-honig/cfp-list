@@ -5,10 +5,11 @@ import { config } from 'dotenv'
 import { initRequest } from './server-session'
 import { createPostgresWithSchemaDataProvider } from './postgres-with-schema'
 import { CFP } from '../shared/cfp'
+import { UserSelection } from '../shared/UserSelection'
 
 config()
 
-const entities = [User, CFP]
+const entities = [User, CFP, UserSelection]
 
 export const api = remultExpress({
   initRequest,
@@ -19,6 +20,6 @@ export const api = remultExpress({
       return createPostgresWithSchemaDataProvider('cfp', entities)
     return undefined //use the basic json db for dev
   },
-  initApi:async () => {
+  initApi: async () => {
   },
 })
