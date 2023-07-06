@@ -7,12 +7,13 @@ import {
   remult
 } from 'remult';
 import type { CFP } from './cfp';
+import { Roles } from './roles';
 
 
 export const userSelectionOptions = ["starred", "hidden", "submitted"] as const;
 
 @Entity("userSelection", {
-  allowApiRead: false
+  allowApiRead: Roles.admin
 })
 export class UserSelection {
   @Fields.uuid()
