@@ -23,7 +23,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.12.1",
-    "remult": "^0.20.4",
+    "remult": "^0.21.1-exp.8",
     "tsx": "^3.12.7",
     "vite3-plugin-express": "^0.1.3"
   },
