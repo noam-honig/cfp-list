@@ -13,6 +13,8 @@ import { Users } from './components/users'
 import { CFPList } from './components/cfp-list'
 import '@vonage/vivid/header'
 import '@vonage/vivid/button'
+import '@vonage/vivid/nav-item'
+
 import GithubSignIn, { GithubSignInButton } from './components/github-signin'
 import { Roles } from './shared/roles'
 import '@vonage/vivid/side-drawer'
@@ -119,7 +121,7 @@ function App() {
           )}
 
           <vwc-menu-item
-            text="join our whatsapp group"
+            text="Join our whatsapp group"
             onClick={() =>
               link('https://chat.whatsapp.com/ErE6atVxKqnAPb6rwiT22H')
             }
@@ -127,7 +129,19 @@ function App() {
             <vwc-icon slot="meta" name="whatsapp-mono" size="-4" />
           </vwc-menu-item>
           <vwc-menu-item
-            text="improve this site on github"
+            text="Built using remult"
+            onClick={() => {
+              link('https://remult.dev')
+            }}
+          >
+            <img
+              style={{ width: '24px' }}
+              slot="meta"
+              src="https://github.com/remult/remult/raw/master/docs/public/logo.png"
+            ></img>
+          </vwc-menu-item>
+          <vwc-menu-item
+            text="Source on Github"
             onClick={() => link('https://github.com/noam-honig/cfp-list')}
           >
             <vwc-icon slot="meta" name="github-mono" size="-4" />

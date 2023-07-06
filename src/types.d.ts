@@ -28,7 +28,8 @@ declare global {
       ['vwc-side-drawer']: CustomElement<any>
       ['vwc-menu-item']: CustomElement<any>
       ['vwc-menu']: CustomElement<any>
-      ['vwc-switch']:CustomElement<any>
+      ['vwc-switch']: CustomElement<any>
+      ['vwc-nav-item']: CustomElement<any>
     }
   }
 }
