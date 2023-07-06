@@ -9,6 +9,7 @@ import {
   ToggleUserSelectionMethod,
   UserSelectionButtons,
 } from './user-selection-buttons'
+import '@vonage/vivid/text-field'
 
 export default function CfpDialog({
   toggleUserSelection,
