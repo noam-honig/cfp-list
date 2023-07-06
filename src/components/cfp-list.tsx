@@ -62,7 +62,7 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
       .liveQuery({
         orderBy: url.recentlyAdded
           ? {
-              conferenceDate: 'desc',
+              createdAt: 'desc',
               cfpDate: 'asc',
             }
           : {
