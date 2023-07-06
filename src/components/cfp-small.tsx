@@ -54,7 +54,7 @@ export default function CfpSmall({
               </a>
             </div>
           </div>
-          <div>{formatDate(cfp.cfpDate)}</div>
+          <div>{formatDate(cfp.conferenceDate)}</div>
           <div
             style={{
               font: 'var(--vvd-typography-base-bold)',
