@@ -10,6 +10,8 @@ import {
   UserSelectionButtons,
 } from './user-selection-buttons'
 import '@vonage/vivid/text-field'
+import '@vonage/vivid/text-area';
+
 
 export default function CfpDialog({
   toggleUserSelection,
@@ -176,7 +178,14 @@ export default function CfpDialog({
                     return (
                       <div key={key}>
                         {key == 'notes' ? (
-                          <></>
+                          <vwc-text-area
+                            style={{ paddingTop: '24px' }}
+                            label="Notes"
+                            value={value}
+                            onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              setValue(e.target.value)
+                            }
+                          ></vwc-text-area>
                         ) : (
                           <>
                             {meta.inputType === 'number' ? (
@@ -210,7 +219,7 @@ export default function CfpDialog({
                   })}
                 </vwc-layout>
               </form>
-              <vwc-layout column-basis="medium">
+              <vwc-layout slot="footer" column-basis="medium">
                 <vwc-text-area
                   style={{ paddingTop: '24px' }}
                   label="Notes"
