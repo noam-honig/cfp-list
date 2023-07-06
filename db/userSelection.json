@@ -142,5 +142,21 @@
     "selection": "submitted",
     "createdAt": "2023-07-06T08:28:24.767Z",
     "selected": false
+  },
+  {
+    "id": "978f5ce0-d262-4c04-92b9-bc7b6df46f43",
+    "cfpId": "cljq0cszm0001xor33fr6f08w",
+    "userId": "github-Noam",
+    "selection": "hidden",
+    "createdAt": "2023-07-06T15:27:33.673Z",
+    "selected": true
+  },
+  {
+    "id": "89863497-28b3-4338-86c6-d651c3bf3274",
+    "cfpId": "cliqybbyc00060v468m20eiae",
+    "userId": "github-Noam",
+    "selection": "hidden",
+    "createdAt": "2023-07-06T15:27:41.834Z",
+    "selected": true
   }
 ]

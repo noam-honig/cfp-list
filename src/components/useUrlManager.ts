@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-const flags = ["showOverdue", "showHidden", "showStarred", "hideSubmitted", "recentlyAdded"] as const;
+const flags = ["showOverdue", "showHidden", "showStarred", "hideSubmitted", "recentlyAdded","sortByConferenceDate"] as const;
 type flagsType<T extends readonly string[]> = {
   [K in T[number]]: boolean;
 } & {

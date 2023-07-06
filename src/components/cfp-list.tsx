@@ -1,4 +1,4 @@
-import { remult,  EntityFilter } from 'remult'
+import { remult, EntityFilter } from 'remult'
 import { CFP } from '../shared/cfp'
 import { useEffect, useState } from 'react'
 
@@ -65,6 +65,11 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
               createdAt: 'desc',
               cfpDate: 'asc',
             }
+          : url.sortByConferenceDate
+          ? {
+              conferenceDate: 'asc',
+              cfpDate: 'asc',
+            }
           : {
               cfpDate: 'asc',
               conferenceDate: 'asc',
@@ -85,6 +90,7 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
     url.showHidden,
     url.hideSubmitted,
     url.recentlyAdded,
+    url.sortByConferenceDate
   ])
 
   return (

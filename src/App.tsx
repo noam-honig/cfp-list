@@ -27,7 +27,7 @@ import { User } from './shared/user'
 import { useUrlManager } from './components/useUrlManager'
 
 function App() {
-  const [_, render] = useState<{}>()
+  const [loaded, setLoaded] = useState(false)
   const [drawer, setDrawer] = useState(false)
   const navigate = useNavigate()
   const url = useUrlManager()
@@ -43,22 +43,24 @@ function App() {
   const drawerRef = useRef<SideDrawer>()
   const showingCfp = location.pathname == '/'
   useEffect(() => {
-    drawerRef.current?.addEventListener('close', () => {
-      setDrawer(false)
-    })
     AuthController.currentUser()
       .then((user) => {
         remult.user = user
-        render({})
+        setLoaded(true)
       })
       .catch((err) => alert(err.message))
   }, [])
+  useEffect(() => {
+    drawerRef.current?.addEventListener('close', () => {
+      setDrawer(false)
+    })
+  }, [loaded])
   async function signOut() {
     await AuthController.signOut()
     window.location.reload()
   }
 
-  if (_ === undefined) return <>loading</>
+  if (!loaded) return <>loading</>
   return (
     <>
       <vwc-header>
@@ -70,9 +72,28 @@ function App() {
           <vwc-button icon="menu-solid" onClick={() => setDrawer(!drawer)} />
           <vwc-menu-item
             text="Sort by Recently Added"
-            onClick={() => url.toggleRecentlyAdded()}
+            onClick={() => {
+              url.toggleRecentlyAdded()
+              if (!url.recentlyAdded && url.sortByConferenceDate) {
+                url.toggleSortByConferenceDate()
+              }
+            }}
           >
             <vwc-switch slot="meta" checked={url.recentlyAdded}></vwc-switch>
+          </vwc-menu-item>
+
+          <vwc-menu-item
+            text="Sort by Conference Date"
+            onClick={() => {
+              if (!url.sortByConferenceDate && url.recentlyAdded)
+                url.toggleRecentlyAdded()
+              url.toggleSortByConferenceDate()
+            }}
+          >
+            <vwc-switch
+              slot="meta"
+              checked={url.sortByConferenceDate}
+            ></vwc-switch>
           </vwc-menu-item>
           <vwc-menu-item
             text="Show overdue CFPs"
