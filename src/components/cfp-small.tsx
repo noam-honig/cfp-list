@@ -40,16 +40,19 @@ export default function CfpSmall({
           }}
         >
           <div
-            onClick={select}
+            
             style={{
               font: 'var(--vvd-typography-base-extended-bold)',
               display: 'flex',
               justifyContent: 'space-between',
             }}
           >
+            <span onClick={select}>
+
             {cfp.conferenceName}{' '}
+            </span>
             <div>
-              <a href={cfp.cfpLink} target="_blank">
+              <a href={cfp.link} target="_blank">
                 <vwc-icon name="open-line" connotation="accent"></vwc-icon>
               </a>
             </div>
