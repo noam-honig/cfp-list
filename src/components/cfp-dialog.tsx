@@ -228,7 +228,7 @@ export default function CfpDialog({
                   connotation="success"
                   onClick={save}
                 ></vwc-button>
-                {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
+                {!createNew && cfpRepo.metadata.apiDeleteAllowed(cfp) && (
                   <vwc-button
                     connotation="alert"
                     appearance="filled"
