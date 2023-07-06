@@ -83,12 +83,16 @@ export class CFP {
   static async getEventOpenGraphInfo(url: string) {
     const ogs = await import('open-graph-scraper')
     const r = (await ogs.default({ url })).result
-    //[ ] improve open graph extraction for problems we had
-    //[ ] with a link to a cfp, return correct open graph comments, so it'll share well on whatsapp
+
+    let image = r.ogImage && r.ogImage.length > 0 ? r.ogImage[0].url : '';
+    if (image.startsWith('/')) {
+      image = new URL(url).href + image;
+    }
+
     return {
       title: r.ogTitle,
       description: r.ogDescription,
-      image: r.ogImage && r.ogImage.length > 0 ? r.ogImage[0].url : '',
+      image,
       thereIsAMatchingCfpInDb: (
         await remult.repo(CFP).findFirst({
           link: {

@@ -21,5 +21,8 @@ export const api = remultExpress({
     return undefined //use the basic json db for dev
   },
   initApi: async () => {
+    //console.log(await CFP.getEventOpenGraphInfo("https://that.us/events/tx/2024/"))
+
+    
   },
 })

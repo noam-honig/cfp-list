@@ -53,8 +53,7 @@ function App() {
   }, [])
   async function signOut() {
     await AuthController.signOut()
-    remult.user = undefined
-    setDrawer(false)
+    window.location.reload()
   }
 
   if (_ === undefined) return <>loading</>
