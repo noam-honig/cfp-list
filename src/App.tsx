@@ -79,7 +79,7 @@ function App() {
               }
             }}
           >
-            <vwc-switch slot="meta" checked={url.recentlyAdded}></vwc-switch>
+            <vwc-switch slot="meta" current-checked={url.recentlyAdded}></vwc-switch>
           </vwc-menu-item>
 
           <vwc-menu-item
@@ -92,14 +92,14 @@ function App() {
           >
             <vwc-switch
               slot="meta"
-              checked={url.sortByConferenceDate}
+              current-checked={url.sortByConferenceDate}
             ></vwc-switch>
           </vwc-menu-item>
           <vwc-menu-item
             text="Show overdue CFPs"
             onClick={() => url.toggleShowOverdue()}
           >
-            <vwc-switch slot="meta" checked={url.showOverdue}></vwc-switch>
+            <vwc-switch slot="meta" current-checked={url.showOverdue}></vwc-switch>
           </vwc-menu-item>
           {remult.authenticated() && (
             <>
@@ -107,13 +107,13 @@ function App() {
                 text="Only show starred"
                 onClick={() => url.toggleShowStarred()}
               >
-                <vwc-switch slot="meta" checked={url.showStarred}></vwc-switch>
+                <vwc-switch slot="meta" current-checked={url.showStarred}></vwc-switch>
               </vwc-menu-item>
               <vwc-menu-item
                 text="Show hidden"
                 onClick={() => url.toggleShowHidden()}
               >
-                <vwc-switch slot="meta" checked={url.showHidden}></vwc-switch>
+                <vwc-switch slot="meta" current-checked={url.showHidden}></vwc-switch>
               </vwc-menu-item>
               <vwc-menu-item
                 text="Hide Submitted"
@@ -121,7 +121,7 @@ function App() {
               >
                 <vwc-switch
                   slot="meta"
-                  checked={url.hideSubmitted}
+                  current-checked={url.hideSubmitted}
                 ></vwc-switch>
               </vwc-menu-item>
             </>
