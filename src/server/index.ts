@@ -16,15 +16,21 @@ if (!process.env['VITE']) {
   //app.use(helmet())
   app.use(compression())
   const frontendFiles = process.cwd() + '/dist'
-  const index = frontendFiles + '/index.html';
+  const index = frontendFiles + '/index.html'
   app.get('/', (req, res) => {
-    const cfpId = req.query?.cfp;
+    const cfpId = req.query?.cfp
     if (cfpId) {
       api.withRemult(req, res, async () => {
-        const cfp = await cfpRepo.findId(cfpId! as string);
+        const cfp = await cfpRepo.findId(cfpId! as string)
         if (cfp) {
-          res.send(fs.readFileSync(index).toString().replace("<!--TITLE-->", " - " + cfp.conferenceName).replace("<!--META-->",
-            `
+          res.send(
+            fs
+              .readFileSync(index)
+              .toString()
+              .replace('<!--TITLE-->', ' - ' + cfp.conferenceName)
+              .replace(
+                '<!--META-->',
+                `
 <meta
 name="description"
 property="og:description"
@@ -35,21 +41,22 @@ property="og:image"
 content="${cfp.image}"
 />
 `
-          ))
-
+              )
+          )
         } else {
-          res.sendFile(index)
+          res.send(
+            fs.readFileSync(index).toString().replace('<!--TITLE-->', '')
+          )
         }
       })
-      return;
+      return
     }
 
     res.sendFile(index)
   })
   app.use(express.static(frontendFiles))
   app.get('/*', (_, res) => {
-    res.sendFile(index)
-
+    res.send(fs.readFileSync(index).toString().replace('<!--TITLE-->', ''))
   })
   app.listen(process.env['PORT'] || 3001, () => console.log('Server started'))
 }
