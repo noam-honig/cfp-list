@@ -52,7 +52,7 @@ content="${cfp.image}"
       return
     }
 
-    res.sendFile(index)
+    res.send(fs.readFileSync(index).toString().replace('<!--TITLE-->', ''))
   })
   app.use(express.static(frontendFiles))
   app.get('/*', (_, res) => {
