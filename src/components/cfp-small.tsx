@@ -64,7 +64,7 @@ export default function CfpSmall({
             }}
           >
             CFP: {formatDate(cfp.cfpDate)}
-            <a href={cfp.cfpLink}>
+            <a href={cfp.cfpLink} target='_blank'>
               <vwc-icon
                 name="open-line"
                 connotation="accent"
