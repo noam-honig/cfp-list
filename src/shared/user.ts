@@ -1,6 +1,5 @@
 import { Entity, Fields, remult } from 'remult'
 import { Roles } from './roles'
-import { CFP } from './cfp'
 import { UserSelection } from './UserSelection'
 
 @Entity('users', {
