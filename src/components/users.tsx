@@ -23,6 +23,9 @@ export function Users() {
             Username
           </vwc-data-grid-cell>
           <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
+            selection
+          </vwc-data-grid-cell>
+          <vwc-data-grid-cell cell-type="columnheader" role="columnheader">
             admin
           </vwc-data-grid-cell>
         </vwc-data-grid-row>
@@ -31,6 +34,7 @@ export function Users() {
           return (
             <vwc-data-grid-row key={user.id}>
               <vwc-data-grid-cell>{user.name}</vwc-data-grid-cell>
+              <vwc-data-grid-cell>{user.interactions}</vwc-data-grid-cell>
               <vwc-data-grid-cell
                 onClick={() => userRepo.save({ ...user, admin: !user.admin })}
               >

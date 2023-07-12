@@ -1,5 +1,7 @@
-import { Entity, Fields } from 'remult'
+import { Entity, Fields, remult } from 'remult'
 import { Roles } from './roles'
+import { CFP } from './cfp'
+import { UserSelection } from './UserSelection'
 
 @Entity('users', {
   allowApiCrud: Roles.admin,
@@ -19,4 +21,10 @@ export class User {
 
   @Fields.createdAt()
   createdAt = new Date()
+
+  @Fields.integer<User>({
+    serverExpression: async (self) =>
+      remult.repo(UserSelection).count({ userId: self.id }),
+  })
+  interactions = 0
 }

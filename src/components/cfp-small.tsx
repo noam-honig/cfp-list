@@ -40,17 +40,13 @@ export default function CfpSmall({
           }}
         >
           <div
-            
             style={{
               font: 'var(--vvd-typography-base-extended-bold)',
               display: 'flex',
               justifyContent: 'space-between',
             }}
           >
-            <span onClick={select}>
-
-            {cfp.conferenceName}{' '}
-            </span>
+            <span onClick={select}>{cfp.conferenceName} </span>
             <div>
               <a href={cfp.link} target="_blank">
                 <vwc-icon name="open-line" connotation="accent"></vwc-icon>
@@ -68,13 +64,15 @@ export default function CfpSmall({
             }}
           >
             CFP: {formatDate(cfp.cfpDate)}
-            <vwc-icon
-              name="open-line"
-              connotation="accent"
-              style={{
-                paddingLeft: '8px',
-              }}
-            ></vwc-icon>
+            <a href={cfp.cfpLink}>
+              <vwc-icon
+                name="open-line"
+                connotation="accent"
+                style={{
+                  paddingLeft: '8px',
+                }}
+              ></vwc-icon>
+            </a>
           </div>
         </div>
       </div>
