@@ -10,6 +10,7 @@ declare module 'remult' {
 export async function initRequest(req: Request) {
   remult.context.session = req.session!
   remult.user = req.session!['user']
+  req.sessionOptions.maxAge = 365 * 86400000
 }
 
 export function setSessionUser(user: UserInfo): UserInfo {
