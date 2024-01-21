@@ -162,7 +162,7 @@ function App() {
             ></img>
           </vwc-menu-item>
           <vwc-menu-item
-            text="Source on Github"
+            text="Source on GitHub"
             onClick={() => link('https://github.com/noam-honig/cfp-list')}
           >
             <vwc-icon slot="meta" name="github-mono" size="-4" />
