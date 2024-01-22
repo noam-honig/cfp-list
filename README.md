@@ -7,7 +7,7 @@ See it live [CFP List](https://cfplist.herokuapp.com/)
 This project loves contributions, and we've made it as easy to contribute as possible.
 
 1. Fork the project
-2. Clone the fork to your computer: `git clone https://github.com/{yourGithubName}/cfp-list` (don't forget to replace {yourGithubName} with your username).
+2. Clone the fork to your computer: `git clone https://github.com/{yourGitHubName}/cfp-list` (don't forget to replace {yourGitHubName} with your username).
 3. Run:
 ```sh
 cd cfp-list

@@ -14,7 +14,7 @@ export default function GithubSignIn({ signedIn }: { signedIn: VoidFunction }) {
       })
       .catch((err: any) => alert(err.message))
   }, [])
-  return <span>waiting for github sign in....</span>
+  return <span>waiting for GitHub sign in....</span>
 }
 
 let staticGithubSignInUrl = ''
@@ -28,7 +28,7 @@ export function GithubSignInButton({ signedIn }: { signedIn: VoidFunction }) {
 
   return (
     <vwc-menu-item
-      text="Sign in with github"
+      text="Sign in with GitHub"
       onClick={() => signInWithGithub(signedIn)}
     >
       <vwc-icon name="github-mono" slot="meta" size="-4" />
