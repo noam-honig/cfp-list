@@ -45,7 +45,6 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
       return val
     })
   }
-  const [refresh, setRefresh] = useState(0)
 
   useEffect(() => {
     const conditions: EntityFilter<CFP>[] = []
@@ -93,7 +92,6 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
     url.recentlyAdded,
     url.sortByConferenceDate,
     url.cfp,
-    refresh,
   ])
 
   return (
