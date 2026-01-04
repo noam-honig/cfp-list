@@ -45,6 +45,7 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
       return val
     })
   }
+  const [refresh, setRefresh] = useState(0)
 
   useEffect(() => {
     const conditions: EntityFilter<CFP>[] = []
@@ -58,8 +59,8 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
       conditions.push(CFP.filterSubmitted(false))
     }
 
-    return cfpRepo
-      .liveQuery({
+    cfpRepo
+      .find({
         orderBy: url.recentlyAdded
           ? {
               createdAt: 'desc',
@@ -83,14 +84,16 @@ export function CFPList({ signedIn }: { signedIn: VoidFunction }) {
           $and: conditions,
         },
       })
-      .subscribe((info) => setCurrentCfps(info.applyChanges))
+      .then(setCurrentCfps)
   }, [
     url.showOverdue,
     url.showStarred,
     url.showHidden,
     url.hideSubmitted,
     url.recentlyAdded,
-    url.sortByConferenceDate
+    url.sortByConferenceDate,
+    url.cfp,
+    refresh,
   ])
 
   return (
