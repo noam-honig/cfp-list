@@ -39,7 +39,9 @@ export async function createPostgresWithSchemaDataProvider(
         },
   })
   const result = new SqlDatabase(
-    new PostgresDataProvider(new PostgresSchemaWrapper(pool, schema))
+    new PostgresDataProvider(new PostgresSchemaWrapper(pool, schema), {
+      caseInsensitiveIdentifiers: true,
+    })
   )
   const sb = new PostgresSchemaBuilder(result, schema)
   const remult = new Remult(result)
