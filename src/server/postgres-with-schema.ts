@@ -22,6 +22,9 @@ class PostgresSchemaWrapper implements PostgresPool {
       c.release()
     }
   }
+  async end(): Promise<void> {
+    await this.pool.end()
+  }
 }
 export async function createPostgresWithSchemaDataProvider(
   schema: string,

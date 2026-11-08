@@ -6,7 +6,7 @@ import { UserSelection } from './UserSelection'
   allowApiCrud: Roles.admin,
 })
 export class User {
-  @Fields.cuid()
+  @Fields.id()
   id = ''
   @Fields.string()
   name = ''

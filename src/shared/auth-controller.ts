@@ -27,7 +27,8 @@ export class AuthController {
         }
       : await GetUserInfoFromGithub()
     const userRepo = remult.repo(User)
-    let user = await userRepo.findId('github-' + id, { createIfNotFound: true })
+    const user = await userRepo.findId('github-' + id, { createIfNotFound: true })
+    if (!user) throw new Error('Unable to create or find the signed-in user')
     user.name = name
     if (email) user.email = email
     user.githubUrl = html_url

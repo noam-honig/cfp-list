@@ -30,7 +30,7 @@ import { UserSelectionField, getUserSelectionFilter } from './UserSelection';
   },
 })
 export class CFP {
-  @Fields.cuid()
+  @Fields.id()
   id = ''
   @Fields.string({
     validate: Validators.required,

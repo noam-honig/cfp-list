@@ -1,7 +1,7 @@
-import { FieldRef } from "remult"
+import { ValidateFieldEvent } from "remult"
 
-export function validateDate(_: any, fieldRef: FieldRef<any, Date>) {
-  if (!fieldRef.value || fieldRef.value.getFullYear() < 1900)
+export function validateDate(_: any, event: ValidateFieldEvent<any, Date>) {
+  if (!event.value || event.value.getFullYear() < 1900)
     throw new Error('Invalid Date')
 }
 

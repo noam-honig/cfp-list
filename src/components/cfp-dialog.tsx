@@ -64,7 +64,7 @@ export default function CfpDialog({
             useCache: false,
           })
           .then((x) => {
-            setCfp(x)
+            setCfp(x ?? undefined)
             setOpen(true)
           })
     }

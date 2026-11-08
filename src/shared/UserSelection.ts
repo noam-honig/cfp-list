@@ -44,6 +44,8 @@ export class UserSelection {
       userId: remult.user!.id,
       selection
     }, { createIfNotFound: true })
+    if (!existingSelections)
+      throw new Error('Unable to create or find the user selection')
     existingSelections.selected = !existingSelections.selected;
     await repo.save(existingSelections);
     return existingSelections.selected;
