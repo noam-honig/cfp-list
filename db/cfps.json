@@ -343,5 +343,20 @@
     "notes": "React Advanced is a London-based community running an annual conference for advanced React.js engineers. We are going to meet again this year, both in-person and remotely, to address the most complex and trickiest to solve topics related to our favorite JavaScript framework.",
     "createdAt": "2023-07-05T17:43:48.419Z",
     "createUserId": "github-Noam"
+  },
+  {
+    "id": "85de2b5f-fb4a-47ec-a2f3-bb11dada9e37",
+    "conferenceName": "Home | ESANN 2027",
+    "image": "https://bigdataconference.eu/wp-content/uploads/2018/06/bigdata_header_v2-min.png",
+    "link": "https://www.esann.org/",
+    "location": "https://www.esann.org/node/3",
+    "conferenceDate": "2027-04-21",
+    "cfpDate": "2026-11-18",
+    "cfpLink": "",
+    "coverExpanses": "",
+    "whoReported": "123",
+    "notes": "",
+    "createdAt": "2026-11-08T16:24:38.007Z",
+    "createUserId": "github-123"
   }
 ]
