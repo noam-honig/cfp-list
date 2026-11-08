@@ -1,16 +1,33 @@
+import { EventThumb } from './event-thumb'
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { useUrlManager } from './useUrlManager'
 import { CFP, cfpRepo } from '../shared/cfp'
-import { ErrorInfo, remult } from 'remult'
-import { Dialog } from '@vonage/vivid/lib/dialog/dialog'
-import { Confirm } from './confirm'
-import { formatDate } from '../shared/utils'
 import {
   ToggleUserSelectionMethod,
   UserSelectionButtons,
 } from './user-selection-buttons'
-import '@vonage/vivid/text-field'
-import '@vonage/vivid/text-area'
+
+const fields = [
+  ['link', 'Conference website', 'url'],
+  ['conferenceName', 'Conference name', 'text'],
+  ['conferenceDate', 'Conference date', 'date'],
+  ['location', 'Location', 'text'],
+  ['cfpDate', 'Submission deadline', 'date'],
+  ['cfpLink', 'Submission link', 'url'],
+  ['coverExpanses', 'Travel & expenses covered', 'text'],
+  ['whoReported', 'Shared by', 'text'],
+  ['image', 'Event image URL', 'url'],
+] as const
+const dateLabel = (value: Date) =>
+  value
+    ? new Date(value).toLocaleDateString('en', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : 'To be announced'
+const safeUrl = (value: string) =>
+  /^https?:\/\//i.test(value) ? value : undefined
 
 export default function CfpDialog({
   toggleUserSelection,
@@ -18,308 +35,346 @@ export default function CfpDialog({
   toggleUserSelection: ToggleUserSelectionMethod
 }) {
   const url = useUrlManager()
-  const [cfp, setCfp] = useState<CFP>()
-  const [errors, setErrors] = useState<ErrorInfo<CFP>>()
-  const [open, setOpen] = useState(false)
-  const [edit, setEdit] = useState(false)
-  const [confirmOpenState, setConfirmOpenState] = useState(false)
-
   const createNew = url.cfp === 'new'
-
-  async function save(e: FormEvent) {
-    e?.preventDefault()
+  const [cfp, setCfp] = useState<CFP>()
+  const [edit, setEdit] = useState(createNew)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof CFP, string>>
+  >({})
+  const [lookup, setLookup] = useState<{
+    state: 'idle' | 'loading' | 'failed'
+    duplicateOf?: string
+  }>({ state: 'idle' })
+  const lastLookedUp = useRef('')
+  const ref = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    ref.current?.showModal()
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    let active = true
+    if (createNew) {
+      if (cfpRepo.metadata.apiInsertAllowed()) setCfp(new CFP())
+      else setError('Please sign in to add an opportunity.')
+    } else
+      cfpRepo
+        .findId(url.cfp!, { useCache: false })
+        .then((value) => {
+          if (active) {
+            if (value) setCfp(value)
+            else setError('This opportunity could not be found.')
+          }
+        })
+        .catch(() => {
+          if (active)
+            setError(
+              'We couldn’t load this opportunity. Please close and try again.',
+            )
+        })
+    return () => {
+      active = false
+      document.body.style.overflow = overflow
+      previous?.focus()
+    }
+  }, [])
+  // When the conference website is entered, read its Open Graph info to
+  // pre-fill empty fields and warn about possible duplicates.
+  async function lookupLink(value: string) {
+    const link = value.trim()
+    if (!link || link === lastLookedUp.current) return
+    lastLookedUp.current = link
+    setLookup({ state: 'loading' })
     try {
-      setErrors(undefined)
+      const info = await CFP.getEventOpenGraphInfo(link)
+      if (lastLookedUp.current !== link) return
+      setLookup({
+        state: 'idle',
+        duplicateOf: createNew ? info.thereIsAMatchingCfpInDb : undefined,
+      })
+      setCfp((current) => {
+        if (!current) return current
+        const result = { ...current }
+        if (!result.conferenceName && info.title)
+          result.conferenceName = info.title
+        if (!result.image && info.image) result.image = info.image
+        if (!result.notes && info.description) result.notes = info.description
+        return result
+      })
+    } catch (e) {
+      console.error(e)
+      if (lastLookedUp.current === link) setLookup({ state: 'failed' })
+    }
+  }
+  async function save(event: FormEvent) {
+    event.preventDefault()
+    setSaving(true)
+    setError('')
+    setFieldErrors({})
+    try {
       if (createNew) await cfpRepo.insert(cfp!)
       else await cfpRepo.save(cfp!)
       url.setCfp(null)
-    } catch (error: any) {
-      alert(error.message)
-      setErrors(error)
+    } catch (e: any) {
+      setFieldErrors(e.modelState || {})
+      setError(e.message || 'Could not save. Please try again.')
+    } finally {
+      setSaving(false)
     }
   }
-  const deleteCfp = async (confirmValue: string) => {
-    if (confirmValue === 'Yes' && cfp) {
-      try {
-        await cfpRepo.delete(cfp.id)
-      } catch (error: any) {
-        console.error(error.message)
-      }
+  async function remove() {
+    setSaving(true)
+    setError('')
+    try {
+      await cfpRepo.delete(cfp!.id)
+      url.setCfp(null)
+    } catch (e: any) {
+      setError(e.message || 'Could not delete. Please try again.')
+      setSaving(false)
     }
-    setConfirmOpenState(false)
   }
-
-  const ref = useRef<Dialog>()
-  useEffect(() => {
-    if (url.cfp) {
-      if (createNew) {
-        if (cfpRepo.metadata.apiInsertAllowed()) {
-          setCfp(new CFP())
-          setOpen(true)
-          setEdit(true)
-        }
-      } else
-        cfpRepo
-          .findId(url.cfp, {
-            useCache: false,
-          })
-          .then((x) => {
-            setCfp(x)
-            setOpen(true)
-          })
-    }
-  }, [])
-  useEffect(() => {
-    if (open) {
-      if (!ref.current?.open) ref.current?.showModal()
-      ref.current?.addEventListener('close', () => {
-        url.setCfp(null)
-      })
-    }
-  }, [open])
-
   return (
-    <vwc-dialog ref={ref} onClose={() => {}}>
-      {cfp && (
-        <vwc-card
-          style={{ minWidth: '330px' }}
-          slot="main"
-          key={cfp.id}
-          class="cfp-card"
-          headline={cfp.conferenceName}
-          text={cfp.notes}
-        >
-          <Confirm
-            headline={'Delete CFP'}
-            subtitle={
-              'Are you sure you want to delete ' + cfp.conferenceDate + '?'
-            }
-            onClose={deleteCfp}
-            open={confirmOpenState}
-          />
-          <div slot="media" style={{ position: 'relative' }}>
-            <img
-              slot="media"
-              src={
-                cfp.image ? cfp.image : 'https://picsum.photos/id/1015/300/200'
-              }
-              alt="landscape"
-            />
-            <vwc-button
-              appearance="ghost"
-              icon="close-small-line"
-              style={{
-                position: 'absolute',
-                right: '5px',
-                top: '5px',
-              }}
-              onClick={() => {
-                url.setCfp(null)
-              }}
-            />
+    <dialog
+      ref={ref}
+      className="opportunity-dialog"
+      aria-labelledby="dialog-title"
+      onCancel={(event) => {
+        event.preventDefault()
+        if (!saving) url.setCfp(null)
+      }}
+    >
+      <div className="dialog-header">
+        <div>
+          <div className="eyebrow">
+            {createNew
+              ? 'SHARE WITH THE COMMUNITY'
+              : edit
+                ? 'UPDATE OPPORTUNITY'
+                : 'YOUR NEXT STAGE'}
           </div>
-
-          {edit ? (
-            <div slot="footer" className="edit-cfp">
-              <form onSubmit={save}>
-                <vwc-layout column-basis="medium">
-                  {(
-                    [
-                      'link',
-                      'conferenceName',
-                      'conferenceDate',
-                      'cfpLink',
-                      'cfpDate',
-                      'location',
-                      'coverExpanses',
-                      'whoReported',
-                      'image',
-                    ] as (keyof CFP)[]
-                  ).map((key) => {
-                    const meta = cfpRepo.fields.find(key)
-                    const value = meta.toInput(cfp[key])
-                    const error = errors?.modelState?.[key]
-                    const setValue = (what: string) => {
-                      if (key === 'link') {
-                        if (what != cfp.link) {
-                          CFP.getEventOpenGraphInfo(what.trim())
-                            .then((i) => {
-                              if (i.thereIsAMatchingCfpInDb && createNew) {
-                                setTimeout(() => {
-                                  alert(`There is a cfp with a similar link in the db called: ${i.thereIsAMatchingCfpInDb}.
-  Please Make sure that this is not a duplicate before adding it
-                            `)
-                                }, 100)
-                              }
-                              setCfp((current) => {
-                                let result = { ...current! }
-                                if (!result.conferenceName)
-                                  result.conferenceName = i.title!
-                                if (!result.image) result.image = i.image
-                                if (!result.notes) result.notes = i.description!
-                                return result
-                              })
-                            })
-                            .catch((err) => {
-                              console.log(err)
-                              if (!cfp.conferenceName) {
-                                setCfp({
-                                  ...cfp,
-                                  conferenceName: 'Failed to get og info',
-                                })
-                              }
-                            })
-                        }
-                      }
-                      setCfp({ ...cfp, [key]: meta.fromInput(what) })
-                    }
-
-                    return (
-                      <div key={key}>
-                        {key == 'notes' ? (
-                          <vwc-text-area
-                            style={{ paddingTop: '24px' }}
-                            label="Notes"
-                            value={value}
-                            onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
-                              setValue(e.target.value)
-                            }
-                          ></vwc-text-area>
-                        ) : (
-                          <>
-                            {meta.inputType === 'number' ? (
-                              <vwc-number-field
-                                label={meta.caption}
-                                value={value}
-                                onBlur={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => setValue(e.target.value)}
-                              ></vwc-number-field>
-                            ) : (
-                              <vwc-text-field
-                                type={meta.inputType}
-                                label={meta.caption}
-                                value={value}
-                                onBlur={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => setValue(e.target.value)}
-                              ></vwc-text-field>
-                            )}
-                          </>
-                        )}
-
-                        {error && (
-                          <div style={{ color: 'var(--vvd-color-alert-700)' }}>
-                            {error}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </vwc-layout>
-              </form>
-              <vwc-layout slot="footer" column-basis="medium">
-                <vwc-text-area
-                  style={{ paddingTop: '24px' }}
-                  label="Notes"
-                  value={cfp.notes}
-                  onBlur={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setCfp({ ...cfp, notes: e.target.value })
-                  }
-                ></vwc-text-area>
-              </vwc-layout>
-              <vwc-action-group appearance="ghost" class="edit-cfp-buttons">
-                <vwc-button
-                  label="Save"
-                  type="submit"
-                  appearance="filled"
-                  connotation="success"
-                  onClick={save}
-                ></vwc-button>
-                {!createNew && cfpRepo.metadata.apiDeleteAllowed(cfp) && (
-                  <vwc-button
-                    connotation="alert"
-                    appearance="filled"
-                    label="Delete"
-                    onClick={() => {
-                      if (confirm('are you sure you want to delete?')) {
-                        try {
-                          cfpRepo.delete(cfp.id)
-                          url.setCfp(null)
-                        } catch (err: any) {
-                          alert(err.any)
-                        }
-                      }
-                    }}
-                  ></vwc-button>
-                )}
-              </vwc-action-group>
-            </div>
-          ) : (
-            <vwc-data-grid-row slot="footer">
-              <vwc-data-grid-cell>
-                <span className="cfp-property">Name: </span>
-                {cfp.link ? (
-                  <a href={cfp.link} target="_blank">
-                    {cfp.conferenceName}
-                  </a>
-                ) : (
-                  cfp.conferenceName
-                )}
-              </vwc-data-grid-cell>
-              <vwc-data-grid-cell
-                style={{
-                  backgroundColor:
-                    cfp.cfpDate?.valueOf() - new Date().valueOf() < 86400000 * 7
-                      ? 'var(--vvd-color-alert-100)'
-                      : '',
-                }}
-              >
-                <span className="cfp-property">CFP Deadline: </span>
-                <a href={cfp.cfpLink} target="_blank">
-                  {formatDate(cfp.cfpDate)}- Submit
-                </a>
-              </vwc-data-grid-cell>
-              <vwc-data-grid-cell>
-                <span className="cfp-property">Event Date: </span>
-                {formatDate(cfp.conferenceDate)}
-              </vwc-data-grid-cell>
-              <vwc-data-grid-cell>
-                <span className="cfp-property">Location: </span>
-                {cfp.location}
-              </vwc-data-grid-cell>
-              <vwc-data-grid-cell>
-                <span className="cfp-property">Expanses: </span>
-                {cfp.coverExpanses}
-              </vwc-data-grid-cell>
-              {!createNew && (
-                <vwc-data-grid-cell>
-                  <UserSelectionButtons
-                    cfp={cfp}
-                    toggleUserSelection={async (selection) => {
-                      const val = await toggleUserSelection(selection)
-                      setCfp((x) => x && { ...x, [selection]: val })
-                      return val
-                    }}
-                  />
-                </vwc-data-grid-cell>
-              )}
-              {remult.authenticated() && !edit && (
-                <vwc-data-grid-cell>
-                  {cfpRepo.metadata.apiUpdateAllowed(cfp) && (
-                    <vwc-button
-                      connotation="cta"
-                      appearance="filled"
-                      label="Edit"
-                      onClick={() => setEdit(true)}
-                    ></vwc-button>
-                  )}
-                </vwc-data-grid-cell>
-              )}
-            </vwc-data-grid-row>
-          )}
-        </vwc-card>
+          <h2 id="dialog-title">
+            {createNew
+              ? 'Add an opportunity'
+              : edit
+                ? 'Edit opportunity'
+                : cfp?.conferenceName || 'Opportunity details'}
+          </h2>
+        </div>
+        <button
+          className="close-button"
+          aria-label="Close opportunity"
+          disabled={saving}
+          onClick={() => url.setCfp(null)}
+        >
+          ×
+        </button>
+      </div>
+      {error && (
+        <p className="dialog-error" role="alert">
+          {error}
+        </p>
       )}
-    </vwc-dialog>
+      {!cfp && !error && <p role="status">Loading opportunity…</p>}
+      {cfp &&
+        (edit ? (
+          <form onSubmit={save}>
+            <p className="form-intro">
+              Help another speaker find their next stage. Required fields are
+              marked *.
+            </p>
+            <div className="form-grid">
+              {fields.map(([key, label, type]) => {
+                const meta = cfpRepo.fields.find(key)
+                const required = [
+                  'conferenceName',
+                  'conferenceDate',
+                  'cfpDate',
+                ].includes(key)
+                const fieldError = fieldErrors[key]
+                return (
+                  <label
+                    key={key}
+                    className={key === 'link' ? 'full-width' : undefined}
+                  >
+                    {label}
+                    {required ? ' *' : ''}
+                    <input
+                      type={type}
+                      required={required}
+                      value={meta.toInput(cfp[key]) || ''}
+                      disabled={saving}
+                      aria-invalid={fieldError ? true : undefined}
+                      onChange={(e) =>
+                        setCfp({
+                          ...cfp,
+                          [key]: meta.fromInput(e.target.value),
+                        })
+                      }
+                      onBlur={
+                        key === 'link'
+                          ? (e) => lookupLink(e.target.value)
+                          : undefined
+                      }
+                      placeholder={type === 'url' ? 'https://' : undefined}
+                    />
+                    {key === 'link' && (
+                      <span className="field-hint" role="status">
+                        {lookup.state === 'loading'
+                          ? 'Fetching details from the website…'
+                          : lookup.state === 'failed'
+                            ? 'Couldn’t read details from this site. Please fill them in manually.'
+                            : 'Paste the website first and we’ll fill in what we can.'}
+                      </span>
+                    )}
+                    {key === 'link' && lookup.duplicateOf && (
+                      <span className="field-warning" role="alert">
+                        A similar link is already listed as “
+                        {lookup.duplicateOf}”. Please make sure this isn’t a
+                        duplicate.
+                      </span>
+                    )}
+                    {fieldError && (
+                      <span className="field-error">{fieldError}</span>
+                    )}
+                  </label>
+                )
+              })}
+              <label className="full-width">
+                Additional details
+                <textarea
+                  rows={4}
+                  value={cfp.notes}
+                  disabled={saving}
+                  onChange={(e) => setCfp({ ...cfp, notes: e.target.value })}
+                  placeholder="Topics, speaker benefits, or anything useful to know…"
+                />
+              </label>
+            </div>
+            <div className="dialog-actions">
+              <button
+                className="button secondary"
+                type="button"
+                disabled={saving}
+                onClick={() => (createNew ? url.setCfp(null) : setEdit(false))}
+              >
+                Cancel
+              </button>
+              <button
+                className="button primary"
+                type="submit"
+                disabled={saving}
+              >
+                {saving ? 'Saving…' : 'Save opportunity'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <>
+            <EventThumb
+              className="detail-thumb"
+              image={cfp.image}
+              name={cfp.conferenceName}
+            />
+            <div className="detail-deadline">
+              <span>Submission deadline</span>
+              <strong>{dateLabel(cfp.cfpDate)}</strong>
+              {safeUrl(cfp.cfpLink) && (
+                <a
+                  className="button primary"
+                  href={safeUrl(cfp.cfpLink)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Visit submission page ↗
+                </a>
+              )}
+            </div>
+            <dl className="detail-grid">
+              <div>
+                <dt>Conference date</dt>
+                <dd>{dateLabel(cfp.conferenceDate)}</dd>
+              </div>
+              <div>
+                <dt>Location</dt>
+                <dd>{cfp.location || 'To be announced'}</dd>
+              </div>
+              <div>
+                <dt>Travel & expenses</dt>
+                <dd>{cfp.coverExpanses || 'Not specified'}</dd>
+              </div>
+              <div>
+                <dt>Shared by</dt>
+                <dd>{cfp.whoReported || 'The community'}</dd>
+              </div>
+            </dl>
+            {cfp.notes && (
+              <div className="detail-notes">
+                <h3>About this opportunity</h3>
+                <p>{cfp.notes}</p>
+              </div>
+            )}
+            {safeUrl(cfp.link) && (
+              <a
+                className="details-link"
+                href={safeUrl(cfp.link)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Visit conference website ↗
+              </a>
+            )}
+            <div className="detail-tracking">
+              <UserSelectionButtons
+                cfp={cfp}
+                toggleUserSelection={async (selection) => {
+                  const value = await toggleUserSelection(selection)
+                  setCfp((x) => x && { ...x, [selection]: value })
+                  return value
+                }}
+              />
+            </div>
+            <div className="dialog-actions">
+              {cfpRepo.metadata.apiDeleteAllowed(cfp) && (
+                <button
+                  className="button danger"
+                  disabled={saving}
+                  onClick={() => setConfirmDelete(true)}
+                >
+                  Delete
+                </button>
+              )}
+              {cfpRepo.metadata.apiUpdateAllowed(cfp) && (
+                <button
+                  className="button secondary"
+                  onClick={() => setEdit(true)}
+                >
+                  Edit opportunity
+                </button>
+              )}
+            </div>
+            {confirmDelete && (
+              <div className="delete-confirm" role="alert">
+                <p>Delete “{cfp.conferenceName}”? This cannot be undone.</p>
+                <button
+                  className="button secondary"
+                  disabled={saving}
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  Keep opportunity
+                </button>{' '}
+                <button
+                  className="button danger"
+                  disabled={saving}
+                  onClick={remove}
+                >
+                  {saving ? 'Deleting…' : 'Delete opportunity'}
+                </button>
+              </div>
+            )}
+          </>
+        ))}
+    </dialog>
   )
 }

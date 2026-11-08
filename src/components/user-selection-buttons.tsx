@@ -1,38 +1,55 @@
+import { useState } from 'react'
 import { userSelectionOptions } from '../shared/UserSelection'
 import type { CFP } from '../shared/cfp'
-
 export interface UserSelectionButtonProps {
   cfp: CFP
   toggleUserSelection: ToggleUserSelectionMethod
 }
 export type ToggleUserSelectionMethod = (
-  selection: (typeof userSelectionOptions)[number]
+  selection: (typeof userSelectionOptions)[number],
 ) => Promise<boolean>
-
 export function UserSelectionButtons({
   cfp,
   toggleUserSelection,
 }: UserSelectionButtonProps) {
+  const [pending, setPending] = useState(false)
   return (
-    <div>
-      <vwc-button
-        appearance="ghost"
-        label="Star"
-        icon={`star${cfp.starred ? '-solid' : ''}`}
-        onClick={() => toggleUserSelection('starred')}
-      />
-      <vwc-button
-        appearance="ghost"
-        label="hide"
-        icon={'eye-hide-' + (cfp.hidden ? 'solid' : 'line')}
-        onClick={() => toggleUserSelection('hidden')}
-      />
-      <vwc-button
-        appearance="ghost"
-        label="Submitted"
-        icon={cfp.submitted ? 'check-circle-solid' : 'radio-unchecked-line'}
-        onClick={() => toggleUserSelection('submitted')}
-      />
+    <div className="selection-buttons">
+      {(['starred', 'hidden', 'submitted'] as const).map((selection) => (
+        <button
+          key={selection}
+          className={cfp[selection] ? 'selected' : ''}
+          aria-pressed={cfp[selection]}
+          disabled={pending}
+          onClick={async () => {
+            setPending(true)
+            try {
+              await toggleUserSelection(selection)
+            } finally {
+              setPending(false)
+            }
+          }}
+        >
+          <span aria-hidden="true">
+            {selection === 'starred'
+              ? cfp.starred
+                ? '★'
+                : '☆'
+              : selection === 'hidden'
+                ? '◌'
+                : '✓'}
+          </span>{' '}
+          {selection === 'starred'
+            ? cfp.starred
+              ? 'Saved'
+              : 'Save'
+            : selection === 'hidden'
+              ? cfp.hidden
+                ? 'Unhide'
+                : 'Hide'
+              : 'Submitted'}
+        </button>
+      ))}
     </div>
   )
 }

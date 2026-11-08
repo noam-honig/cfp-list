@@ -27,12 +27,12 @@ export function GithubSignInButton({ signedIn }: { signedIn: VoidFunction }) {
   staticGithubSignInUrl = githubSignInUrl
 
   return (
-    <vwc-menu-item
-      text="Sign in with GitHub"
+    <button
+      className="button secondary"
       onClick={() => signInWithGithub(signedIn)}
     >
-      <vwc-icon name="github-mono" slot="meta" size="-4" />
-    </vwc-menu-item>
+      Sign in with GitHub <span aria-hidden="true">↗</span>
+    </button>
   )
 }
 export function signInWithGithub(signedIn: VoidFunction) {
